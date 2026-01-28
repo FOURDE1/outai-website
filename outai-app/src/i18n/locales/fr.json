@@ -1,0 +1,220 @@
+{
+  "common": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "learnMore": "En savoir plus",
+    "getStarted": "Commencer",
+    "submit": "Soumettre",
+    "send": "Envoyer",
+    "loading": "Chargement...",
+    "success": "Succès!",
+    "error": "Erreur",
+    "close": "Fermer",
+    "menu": "Menu",
+    "language": "Langue",
+    "theme": "Thème",
+    "dark": "Sombre",
+    "light": "Clair",
+    "system": "Système"
+  },
+  "nav": {
+    "home": "Accueil",
+    "services": "Services",
+    "contact": "Contact",
+    "blog": "Blog",
+    "business": "Business"
+  },
+  "hero": {
+    "title": "Voyagez confortablement.",
+    "subtitle": "Chaque trajet compte",
+    "description": "Concevez votre voyage avec des chauffeurs experts et des limousines premium. OUTAi assure un confort raffiné et des trajets surveillés dans les grandes villes, offrant efficacité sans compromis",
+    "cta": "Contactez-nous sur Whatsapp"
+  },
+  "craftJourney": {
+    "sectionTitle": "Créez votre",
+    "sectionTitleHighlight": "Voyage!",
+    "sectionDescription": "Votre voyage est plus que des kilomètres, c'est embrasser le sentiment, le confort, les besoins et le service qui répondent à chacun de vos besoins, incluant tous les détails pour la paix et le plaisir.",
+    "refinedComfort": {
+      "title": "Confort Raffiné",
+      "description": "Voitures premium, avec climatisation connectée à vos envies, préparez-vous à transformer vos trajets en moments de tranquillité et de confort."
+    },
+    "seamlessService": {
+      "title": "Service Fluide",
+      "description": "Chauffeurs professionnels formés avec discrétion et excellence. Vos préférences mémorisées, votre vie privée honorée, votre temps respecté."
+    },
+    "curatedAmbiance": {
+      "title": "Ambiance Soignée",
+      "description": "Parfums signature, systèmes audio premium et équipements attentionnés. Chaque détail orchestré pour élever votre voyage au-delà de vos attentes."
+    }
+  },
+  "stats": {
+    "sectionTitle": "Redéfinir la scène du transport et du mouvement",
+    "sectionDescription": "Avec notre application, les utilisateurs peuvent accéder à des trajets abordables du bout des doigts, un transport premium à des prix compétitifs, des directions stratégiques et des itinéraires plus rapides, où votre expérience de transport est portée au niveau supérieur, et vos besoins professionnels sont servis au mieux.",
+    "successfulRides": "Trajets Réussis",
+    "businessClients": "Clients Professionnels"
+  },
+  "services": {
+    "sectionTag": "SERVICES",
+    "sectionTitle": "OUTAI répond à vos besoins où que vous soyez",
+    "sectionDescription": "Personnalisez votre expérience avec nos services développés selon vos exigences",
+    "rides": {
+      "title": "Trajets",
+      "description": "OutAi vous donne la liberté de trouver votre trajet du bout des doigts. Personnalisez votre trajet avec des chauffeurs expérimentés."
+    },
+    "dailyBooking": {
+      "title": "Réservation quotidienne",
+      "description": "Les gens d'affaires ont peu de temps pour penser à leurs trajets dans les jours chargés. Vous pouvez sélectionner votre chauffeur privé bien formé et discret. La réservation irait par multiples de 24 heures qui seront disponibles pour tous vos besoins."
+    },
+    "cabs": {
+      "title": "Taxis",
+      "description": "Pour vos petites courses, OUTAi répond à vos besoins avec des tailles adaptées à ces trajets. Réservez votre trajet via notre application conviviale."
+    },
+    "winch": {
+      "title": "Dépannage",
+      "description": "OUTAi répond à vos besoins commerciaux, qu'il s'agisse d'un enlèvement et livraison de voiture, d'une livraison d'articles pour votre usage domestique ou commercial, vous pouvez réserver le véhicule dont vous avez besoin."
+    },
+    "lastMile": {
+      "title": "Dernier Kilomètre B2B",
+      "description": "Avec notre flotte de véhicules ou motos, nous pouvons gérer vos livraisons commerciales via notre application et nos forfaits."
+    }
+  },
+  "outaiWay": {
+    "sectionTitle": "Découvrez la méthode",
+    "sectionTitleHighlight": "OUTAI",
+    "sectionTitleEnd": "",
+    "userFriendly": {
+      "title": "Convivial",
+      "description": "Votre tableau de bord d'interface avec suivi en temps réel et gestion facile des réservations."
+    },
+    "competitiveRates": {
+      "title": "Tarifs Compétitifs",
+      "description": "Les meilleurs prix du marché avec une tarification transparente, sans frais cachés."
+    },
+    "awesomeServices": {
+      "title": "Ensemble de Services Exceptionnels",
+      "description": "Trajets premium, location de voitures et services care, le tout dans une seule application."
+    },
+    "professionalCaptains": {
+      "title": "Capitaines Professionnels",
+      "description": "Chauffeurs vérifiés formés pour offrir un service exceptionnel à chaque fois."
+    },
+    "aroundTheClock": {
+      "title": "Service 24h/24",
+      "description": "Disponibilité 24h/24 et 7j/7 avec assistance instantanée chaque fois que vous avez besoin d'aide."
+    }
+  },
+  "blog": {
+    "sectionTitle": "Blog OUTAI",
+    "sectionDescription": "Explorez notre collection d'articles informatifs et engageants, où vous trouverez inspiration et informations sur les sujets qui vous tiennent à cœur concernant les voyages et l'arrivée à temps avec intégrité.",
+    "readMore": "Lire Plus",
+    "featured": {
+      "tag": "Nouveau",
+      "title": "Les 5 principales raisons de choisir OUTAI pour votre prochain voyage",
+      "excerpt": "Découvrez pourquoi OUTAI est votre compagnon premium pour le luxe et la commodité"
+    },
+    "posts": {
+      "post1": {
+        "title": "Découvrez Abidjan avec OUTAI - Votre voyage premium",
+        "excerpt": "Découvrez l'Afrique du Nord comme jamais auparavant"
+      },
+      "post2": {
+        "title": "Découvrez la Côte d'Ivoire avec OUTAI - Votre voyage premium en Côte d'Ivoire",
+        "excerpt": "Découvrez la Côte d'Ivoire comme jamais auparavant"
+      }
+    }
+  },
+  "contact": {
+    "sectionTitle": "Contactez OUTAI,",
+    "sectionSubtitle": "Nous sommes là pour vous aider!",
+    "sectionDescription": "Vous avez une question ou besoin d'aide? Contactez-nous pour une expérience de support rapide, fiable et personnalisée.",
+    "formTitle": "Contactez-nous",
+    "formDescription": "Contactez-nous pour toute demande ou support.",
+    "name": "Nom",
+    "email": "Email",
+    "phone": "Téléphone",
+    "message": "Message",
+    "namePlaceholder": "Votre nom complet",
+    "emailPlaceholder": "votre@email.com",
+    "phonePlaceholder": "+33 6 00 00 00 00",
+    "messagePlaceholder": "Comment pouvons-nous vous aider?",
+    "sendMessage": "Envoyer le Message",
+    "successMessage": "Merci! Votre message a été envoyé avec succès. Nous vous répondrons bientôt.",
+    "errorMessage": "Oups! Une erreur s'est produite. Veuillez réessayer plus tard.",
+    "office": {
+      "title": "Notre Bureau",
+      "description": "Visitez-nous dans nos locaux principaux aux Émirats et en Côte d'Ivoire"
+    },
+    "location": "Emplacement",
+    "phone_label": "Téléphone",
+    "email_label": "Email"
+  },
+  "faq": {
+    "sectionTag": "QUESTIONS FRÉQUEMMENT POSÉES",
+    "sectionTitle": "Des questions? Trouvez des réponses rapides!",
+    "sectionSubtitle": "Simplifier votre expérience OUTAI.",
+    "questions": {
+      "q1": {
+        "question": "Comment réserver un trajet avec l'application OUTAI?",
+        "answer": "Téléchargez simplement notre application, créez un compte, entrez votre point de départ et votre destination, choisissez votre type de trajet et confirmez. Un chauffeur vous sera assigné en quelques minutes."
+      },
+      "q2": {
+        "question": "Comment puis-je suivre mon trajet OUTAI?",
+        "answer": "Une fois votre trajet confirmé, vous pouvez suivre votre chauffeur en temps réel via l'application. Vous verrez la position du chauffeur, l'heure d'arrivée estimée et pouvez le contacter directement si nécessaire."
+      },
+      "q3": {
+        "question": "Comment assurez-vous la sécurité des passagers?",
+        "answer": "Tous nos chauffeurs passent des vérifications approfondies et une formation. Nos véhicules sont régulièrement inspectés, et nous avons un support 24h/24, un suivi GPS en temps réel et des fonctionnalités d'assistance d'urgence dans l'application."
+      },
+      "q4": {
+        "question": "Quels types de véhicules sont disponibles sur l'application OUTAI?",
+        "answer": "Nous offrons une gamme de véhicules premium incluant berlines, SUV et voitures de luxe. Tous les véhicules sont bien entretenus, propres et équipés d'équipements modernes pour votre confort."
+      },
+      "q5": {
+        "question": "Comment puis-je payer mon trajet?",
+        "answer": "Vous pouvez payer par plusieurs méthodes incluant cartes de crédit/débit, portefeuilles mobiles ou espèces. Tous les paiements sont sécurisés et vous recevrez un reçu détaillé après chaque trajet."
+      },
+      "q6": {
+        "question": "Que signifie '24 heures sur 24'?",
+        "answer": "24 heures sur 24 signifie que nos services sont disponibles 24 heures par jour, 7 jours sur 7. Que vous ayez besoin d'un trajet à 3h du matin ou à 15h, OUTAI est toujours prêt à vous servir."
+      },
+      "q7": {
+        "question": "L'application OUTAI est-elle disponible pour les comptes entreprise?",
+        "answer": "Oui! Nous offrons des comptes entreprise avec des tarifs spéciaux, une facturation centralisée, des rapports détaillés et une gestion de compte dédiée pour les entreprises de toutes tailles."
+      }
+    }
+  },
+  "footer": {
+    "description": "Services de transport premium offrant confort et professionnalisme pour chaque voyage.",
+    "company": "Entreprise",
+    "about": "À propos",
+    "features": "Fonctionnalités",
+    "works": "Réalisations",
+    "career": "Carrière",
+    "help": "Aide",
+    "support": "Support Client",
+    "deliveryDetails": "Détails de Livraison",
+    "terms": "Conditions Générales",
+    "privacy": "Politique de Confidentialité",
+    "resources": "Ressources",
+    "freeEbooks": "eBooks Gratuits",
+    "howToBlog": "Blog Comment Faire",
+    "subscription": "Abonnement",
+    "copyright": "© 2024 OUTAI. Tous droits réservés.",
+    "social": {
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn"
+    },
+    "address": "6 Souissons de Marseille, Zone 42, Marcory, Abidjan, Côte d'Ivoire"
+  },
+  "errors": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "invalidPhone": "Veuillez entrer un numéro de téléphone valide",
+    "minLength": "Minimum {{min}} caractères requis",
+    "maxLength": "Maximum {{max}} caractères autorisés",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard."
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "common": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "learnMore": "Learn more",
+    "getStarted": "Get Started",
+    "submit": "Submit",
+    "send": "Send",
+    "loading": "Loading...",
+    "success": "Success!",
+    "error": "Error",
+    "close": "Close",
+    "menu": "Menu",
+    "language": "Language",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "contact": "Contact",
+    "blog": "Blog",
+    "business": "Business"
+  },
+  "hero": {
+    "title": "Move in comfort.",
+    "subtitle": "Every journey counts",
+    "description": "Design your journey with expert drivers and premium limousines. OUTAi ensures refined comfort and monitored rides in major cities, delivering efficiency without compromise",
+    "cta": "Contact us on Whatsapp"
+  },
+  "craftJourney": {
+    "sectionTitle": "Craft your",
+    "sectionTitleHighlight": "Journey!",
+    "sectionDescription": "Your journey is more than the miles, it's about embracing the feeling, comfort, needs, and service that fills your every need, and includes all the details for the peace and pleasant.",
+    "refinedComfort": {
+      "title": "Refined Comfort",
+      "description": "Premium cars, with climate connected to your feeling, get ready to transfer your commutes to moments of tranquility and Comfort."
+    },
+    "seamlessService": {
+      "title": "Seamless Service",
+      "description": "Professional chauffeurs trained with discretion and excellence. Your preferences remembered, your privacy honored, your time respected."
+    },
+    "curatedAmbiance": {
+      "title": "Curated Ambiance",
+      "description": "Signature scents, premium sound systems, and thoughtful amenities. Every detail orchestrated to elevate your journey beyond expectation."
+    }
+  },
+  "stats": {
+    "sectionTitle": "Reshaping the Transportation and Movement Scene",
+    "sectionDescription": "With our app, users can access affordable ridges at their fingertips, premium transport at Competitive prices, strategic directions, and faster routes, where your transportation experience is taken to the next level, and your business needs are served best. Sophisticated travel and moving, while being efficient and connected.",
+    "successfulRides": "Successful Rides",
+    "businessClients": "Business Clients"
+  },
+  "services": {
+    "sectionTag": "SERVICES",
+    "sectionTitle": "OUTAI caters to your needs wherever you are",
+    "sectionDescription": "Curate your experience with our services developed to your requirements",
+    "rides": {
+      "title": "Rides",
+      "description": "OutAi gives you the freedom to find your ride at your fingertips. Curate your ride with experienced drivers."
+    },
+    "dailyBooking": {
+      "title": "Daily booking",
+      "description": "Business people have limited time to think about their rides in busy days. You can select your private driver well trained and discrete. The booking would go to multiples of 24 hours that will be available for all your needs."
+    },
+    "cabs": {
+      "title": "Cabs",
+      "description": "Having short errands, OUTAi caters for your needs with sizes that are suitable for such rides. Cater your ride through our friendly app."
+    },
+    "winch": {
+      "title": "Winch",
+      "description": "OUTAi caters for your commercial needs, whether a car pickup and delivery, a delivery of items for your domestic use or commercial use, you can book the vehicle you need to fulfil your requirements."
+    },
+    "lastMile": {
+      "title": "Last Mile B2B",
+      "description": "With our fleet of vehicles or motorcycles, we can cater for your business deliveries through our supported application and packages."
+    }
+  },
+  "outaiWay": {
+    "sectionTitle": "Feature the",
+    "sectionTitleHighlight": "OUTAI",
+    "sectionTitleEnd": "Way",
+    "userFriendly": {
+      "title": "User Friendly",
+      "description": "Our app is thoughtfully designed with your needs in mind intuitive, efficient, and customer-centric, ensuring a seamless booking experience every time"
+    },
+    "competitiveRates": {
+      "title": "Competitive Rates",
+      "description": "Our app is thoughtfully designed with your needs in mind intuitive, efficient, and customer-centric, ensuring a seamless booking experience every time"
+    },
+    "awesomeServices": {
+      "title": "Awesome Set of Services",
+      "description": "Our app is thoughtfully designed with your needs in mind intuitive, efficient, and customer-centric, ensuring a seamless booking experience every time"
+    },
+    "professionalCaptains": {
+      "title": "Professional Captains",
+      "description": "Our app is thoughtfully designed with your needs in mind intuitive, efficient, and customer-centric, ensuring a seamless booking experience every time"
+    },
+    "aroundTheClock": {
+      "title": "Around the Clock Service",
+      "description": "Our app is thoughtfully designed with your needs in mind intuitive, efficient, and customer-centric, ensuring a seamless booking experience every time"
+    }
+  },
+  "blog": {
+    "sectionTitle": "OUTAI Blog",
+    "sectionDescription": "Explore our collection of informative and engaging articles, where you'll find inspiration and information about the topics you care about on travels and arriving in-time and integrity.",
+    "readMore": "Read More",
+    "featured": {
+      "tag": "Just In",
+      "title": "Top 5 reasons why to choose OUTAI for your next journey",
+      "excerpt": "Discover why OUTAI is Your Premium Companion for Luxury and Convenience"
+    },
+    "posts": {
+      "post1": {
+        "title": "Discover Abidjan with OUTAI - Your prime Trip",
+        "excerpt": "Discover North Africa Like Never Before"
+      },
+      "post2": {
+        "title": "Discover Cote d'Ivoire with OUTAI - Your prime Ivory Coast journey",
+        "excerpt": "Discover Cote d'Ivoire Like Never Before"
+      }
+    }
+  },
+  "contact": {
+    "sectionTitle": "Reach Out to OUTAI,",
+    "sectionSubtitle": "We're Here to Help!",
+    "sectionDescription": "Got a question or need assistance? Contact us for a quick, reliable, and personalized support experience.",
+    "formTitle": "Contact Us",
+    "formDescription": "Reach out to us for any inquiries or support.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "namePlaceholder": "Your full name",
+    "emailPlaceholder": "your@email.com",
+    "phonePlaceholder": "+1 (555) 000-0000",
+    "messagePlaceholder": "How can we help you?",
+    "sendMessage": "Send Message",
+    "successMessage": "Thank you! Your message has been sent successfully. We'll get back to you soon.",
+    "errorMessage": "Oops! Something went wrong. Please try again later.",
+    "office": {
+      "title": "Our Office",
+      "description": "Visit us based on the main location of Emirates and Ivory Coast"
+    },
+    "location": "Location",
+    "phone_label": "Phone",
+    "email_label": "Email"
+  },
+  "faq": {
+    "sectionTag": "FREQUENTLY ASKED QUESTIONS",
+    "sectionTitle": "Got questions? Find quick answers!",
+    "sectionSubtitle": "Simplifying your OUTAI experience.",
+    "questions": {
+      "q1": {
+        "question": "How do I book a ride with OUTAI App?",
+        "answer": "Simply download our app, create an account, enter your pickup and destination, choose your ride type, and confirm. A driver will be assigned within minutes."
+      },
+      "q2": {
+        "question": "How can I track my OUTAI ride?",
+        "answer": "Once your ride is confirmed, you can track your driver in real-time through the app. You'll see the driver's location, estimated arrival time, and can contact them directly if needed."
+      },
+      "q3": {
+        "question": "How do you ensure passenger safety?",
+        "answer": "All our drivers undergo thorough background checks and training. Our vehicles are regularly inspected, and we have 24/7 support, real-time GPS tracking, and emergency assistance features in the app."
+      },
+      "q4": {
+        "question": "What type of vehicles are available on OUTAI App?",
+        "answer": "We offer a range of premium vehicles including sedans, SUVs, and luxury cars. All vehicles are well-maintained, clean, and equipped with modern amenities for your comfort."
+      },
+      "q5": {
+        "question": "How do I pay for my ride?",
+        "answer": "You can pay through multiple methods including credit/debit cards, mobile wallets, or cash. All payments are secure and you'll receive a detailed receipt after each ride."
+      },
+      "q6": {
+        "question": "What is meant by 'around the clock'?",
+        "answer": "Around the clock means our services are available 24 hours a day, 7 days a week. Whether you need a ride at 3 AM or 3 PM, OUTAI is always ready to serve you."
+      },
+      "q7": {
+        "question": "Is OUTAI App available for corporate accounts?",
+        "answer": "Yes! We offer corporate accounts with special rates, centralized billing, detailed reporting, and dedicated account management for businesses of all sizes."
+      }
+    }
+  },
+  "footer": {
+    "description": "Premium transportation services delivering comfort and professionalism for every journey.",
+    "company": "Company",
+    "about": "About",
+    "features": "Features",
+    "works": "Works",
+    "career": "Career",
+    "help": "Help",
+    "support": "Customer Support",
+    "deliveryDetails": "Delivery Details",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "resources": "Resources",
+    "freeEbooks": "Free eBooks",
+    "howToBlog": "How to - Blog",
+    "subscription": "Subscription",
+    "copyright": "© 2024 OUTAI. All rights reserved.",
+    "social": {
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn"
+    },
+    "address": "6 Souissons de Marseille, Zone 42, Marcory, Abidjan, Cote d'Ivoire"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhone": "Please enter a valid phone number",
+    "minLength": "Minimum {{min}} characters required",
+    "maxLength": "Maximum {{max}} characters allowed",
+    "networkError": "Network error. Please check your connection.",
+    "serverError": "Server error. Please try again later."
+  }
+}
