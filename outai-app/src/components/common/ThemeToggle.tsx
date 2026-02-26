@@ -59,7 +59,7 @@ export function ThemeToggle({ className, variant = 'default' }: ThemeToggleProps
           className
         )}
         aria-label={t('common.theme')}
-        title={theme === 'light' ? 'Light' : theme === 'dark' ? 'Dark' : 'System'}
+        title={theme === 'light' ? t('common.light') : theme === 'dark' ? t('common.dark') : t('common.system')}
       >
         {getIcon()}
       </button>

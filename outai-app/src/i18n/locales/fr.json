@@ -15,7 +15,9 @@
     "theme": "Thème",
     "dark": "Sombre",
     "light": "Clair",
-    "system": "Système"
+    "system": "Système",
+    "scrollLeft": "Défiler vers la gauche",
+    "scrollRight": "Défiler vers la droite"
   },
   "nav": {
     "home": "Accueil",
@@ -28,7 +30,8 @@
     "title": "Voyagez confortablement.",
     "subtitle": "Chaque trajet compte",
     "description": "Concevez votre voyage avec des chauffeurs experts et des limousines premium. OUTAi assure un confort raffiné et des trajets surveillés dans les grandes villes, offrant efficacité sans compromis",
-    "cta": "Contactez-nous sur Whatsapp"
+    "cta": "Contactez-nous sur Whatsapp",
+    "phoneAlt": "Application OUTAI"
   },
   "craftJourney": {
     "sectionTitle": "Créez votre",
@@ -51,7 +54,8 @@
     "sectionTitle": "Redéfinir la scène du transport et du mouvement",
     "sectionDescription": "Avec notre application, les utilisateurs peuvent accéder à des trajets abordables du bout des doigts, un transport premium à des prix compétitifs, des directions stratégiques et des itinéraires plus rapides, où votre expérience de transport est portée au niveau supérieur, et vos besoins professionnels sont servis au mieux.",
     "successfulRides": "Trajets Réussis",
-    "businessClients": "Clients Professionnels"
+    "businessClients": "Clients Professionnels",
+    "imageAlt": "Remise des clés de voiture"
   },
   "services": {
     "sectionTag": "SERVICES",
@@ -146,7 +150,10 @@
     },
     "location": "Emplacement",
     "phone_label": "Téléphone",
-    "email_label": "Email"
+    "email_label": "Coordonnées",
+    "hours": "Sam - Jeu: 7h - 16h30",
+    "iframeTitle": "Emplacement du bureau OUTAI",
+    "address": "Boulevard de Marseille, Zone 4C, Marcory, Abidjan, Côte d'Ivoire"
   },
   "faq": {
     "sectionTag": "QUESTIONS FRÉQUEMMENT POSÉES",
@@ -199,7 +206,7 @@
     "freeEbooks": "eBooks Gratuits",
     "howToBlog": "Blog Comment Faire",
     "subscription": "Abonnement",
-    "copyright": "© 2024 OUTAI. Tous droits réservés.",
+    "copyright": "© {{year}} OUTAI. Tous droits réservés.",
     "social": {
       "facebook": "Facebook",
       "twitter": "Twitter",
@@ -207,6 +214,24 @@
       "linkedin": "LinkedIn"
     },
     "address": "6 Souissons de Marseille, Zone 42, Marcory, Abidjan, Côte d'Ivoire"
+  },
+  "lastMileB2B": {
+    "pageTitle": "Dernier Kilomètre B2B",
+    "description": "Nos assistants récupèrent et livrent vos commandes directement à destination avec une flotte multi-véhicules et un système de suivi conçu pour vos besoins logistiques professionnels.",
+    "tagline": "À LA MANIÈRE OUTAi",
+    "formTitle": "Demander une Livraison",
+    "pickup": "Point de collecte",
+    "pickupPlaceholder": "Entrez le lieu de collecte",
+    "destination": "Destination",
+    "destinationPlaceholder": "Entrez l'adresse de destination",
+    "expectedTime": "Délai de livraison prévu",
+    "expectedTimePlaceholder": "Sélectionnez l'heure de livraison",
+    "itemsDescription": "Description des articles",
+    "itemsDescriptionPlaceholder": "Décrivez les articles à livrer...",
+    "submit": "Soumettre",
+    "submitting": "En cours...",
+    "successMessage": "Votre demande de livraison a été soumise avec succès!",
+    "errorMessage": "Une erreur s'est produite. Veuillez réessayer."
   },
   "errors": {
     "required": "Ce champ est obligatoire",

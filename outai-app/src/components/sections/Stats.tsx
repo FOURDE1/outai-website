@@ -1,20 +1,68 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useRef } from 'react';
 import { Container } from '@/components/common';
 import { fadeInLeft, fadeInRight, viewportSettings } from '@/lib/animations';
+import { useSectionContent, useCmsImage } from '@/contexts/CmsContext';
 
-// Import the stats image - add to: src/assets/stats/car-keys.png
 import statsImage from '@/assets/stats/car-keys.jpg';
 
+// Count-up hook: animates a number from 0 to target when visible
+function useCountUp(target: number, duration: number = 1500) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!ref.current || hasStarted) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+          const startTime = performance.now();
+          const animate = (now: number) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (progress < 1) requestAnimationFrame(animate);
+          };
+          requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, duration, hasStarted]);
+
+  return { count, ref };
+}
+
+// Parse number from CMS string like "500 +"
+function parseStatNumber(val: string): number {
+  const match = val.match(/\d+/);
+  return match ? parseInt(match[0], 10) : 0;
+}
+
+function parseSuffix(val: string): string {
+  const match = val.match(/\d+\s*(.*)/);
+  return match ? ` ${match[1]}` : '';
+}
+
 export function Stats() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language === 'fr' ? 'fr' : 'en';
+  const cms = useSectionContent('stats', lang);
+  const statImg = useCmsImage('stats_image', statsImage);
 
   return (
     <section 
       id="stats"
       className="w-full relative z-20 overflow-hidden"
       style={{ 
-        backgroundColor: '#263140',
+        backgroundColor: 'var(--color-bg-hero, #263140)',
       }}
     >
       <Container>
@@ -39,23 +87,43 @@ export function Stats() {
               height: '509px',
             }}
           >
-            {/* Yellow Ellipse - Top Left */}
-            <div 
+            {/* Yellow Ellipse - Top Left - with entrance + breathing */}
+            <motion.div 
               className="absolute"
+              initial={{ scale: 0, opacity: 0, filter: 'blur(10px)' }}
+              whileInView={{ scale: [0, 1.1, 1], opacity: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              animate={{
+                scale: [1, 1.05, 1],
+                transition: {
+                  scale: { delay: 1.5, duration: 4, repeat: Infinity, ease: 'easeInOut' },
+                },
+              }}
               style={{
                 width: '150px',
                 height: '150px',
                 left: '0',
                 top: '18px',
-                backgroundColor: '#FADF23',
+                backgroundColor: 'var(--color-yellow-accent, #FADF23)',
                 borderRadius: '75px',
-                boxShadow: '0px 4px 12px #1c1c1c',
+                boxShadow: '0px 4px 12px var(--color-shadow-dark, #1c1c1c)',
               }}
             />
             
-            {/* Green Gradient Ellipse - Bottom Right */}
-            <div 
+            {/* Green Gradient Ellipse - Bottom Right - with entrance + breathing */}
+            <motion.div 
               className="absolute"
+              initial={{ scale: 0, opacity: 0, filter: 'blur(10px)' }}
+              whileInView={{ scale: [0, 1.1, 1], opacity: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              animate={{
+                scale: [1, 1.05, 1],
+                transition: {
+                  scale: { delay: 2, duration: 5, repeat: Infinity, ease: 'easeInOut' },
+                },
+              }}
               style={{
                 width: '262px',
                 height: '262px',
@@ -68,15 +136,18 @@ export function Stats() {
             />
             
             {/* Main Image */}
-            <img
-              src={statsImage}
-              alt="Car keys handover"
+            <motion.img
+              src={statImg}
+              alt={t('stats.imageAlt')}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="absolute object-cover"
               style={{
                 width: '325px',
                 height: '476px',
                 left: '63px',
                 top: '-12px',
+                borderRadius: '24px',
               }}
             />
           </motion.div>
@@ -95,7 +166,7 @@ export function Stats() {
               {/* Heading */}
               <h2 
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Sulphur Point", sans-serif',
                   fontSize: '40px',
                   fontWeight: 700,
@@ -109,7 +180,7 @@ export function Stats() {
               {/* Paragraph */}
               <p 
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Inter", sans-serif',
                   fontSize: '16px',
                   fontWeight: 300,
@@ -127,70 +198,90 @@ export function Stats() {
               style={{ maxWidth: '440px' }}
             >
               {/* Stat 1 - Successful Rides */}
-              <div 
-                className="flex flex-col items-center"
-                style={{ gap: '26px', width: '149px' }}
-              >
-                <span 
-                  style={{
-                    color: '#01A532',
-                    fontFamily: '"Roboto", sans-serif',
-                    fontSize: '50px',
-                    fontWeight: 700,
-                    lineHeight: '30px',
-                    textAlign: 'center',
-                  }}
-                >
-                  500 +
-                </span>
-                <span 
-                  style={{
-                    color: '#FFFFFF',
-                    fontFamily: '"Roboto", sans-serif',
-                    fontSize: '20px',
-                    fontWeight: 700,
-                    lineHeight: '30px',
-                  }}
-                >
-                  {t('stats.successfulRides')}
-                </span>
-              </div>
+              <StatCounter
+                value={cms.stat1Value || '500 +'}
+                label={cms.stat1Label || t('stats.successfulRides')}
+                color="var(--color-primary, #01A532)"
+                delay={0.2}
+                width="149px"
+                gap="26px"
+              />
 
               {/* Stat 2 - Business Clients */}
-              <div 
-                className="flex flex-col items-center"
-                style={{ gap: '23px', width: '148px' }}
-              >
-                <span 
-                  style={{
-                    color: '#7AC90E',
-                    fontFamily: '"Roboto", sans-serif',
-                    fontSize: '50px',
-                    fontWeight: 700,
-                    lineHeight: '30px',
-                    textAlign: 'center',
-                  }}
-                >
-                  300 +
-                </span>
-                <span 
-                  style={{
-                    color: '#FFFFFF',
-                    fontFamily: '"Roboto", sans-serif',
-                    fontSize: '20px',
-                    fontWeight: 700,
-                    lineHeight: '30px',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {t('stats.businessClients')}
-                </span>
-              </div>
+              <StatCounter
+                value={cms.stat2Value || '300 +'}
+                label={cms.stat2Label || t('stats.businessClients')}
+                color="var(--color-primary-start, #7AC90E)"
+                delay={0.4}
+                width="148px"
+                gap="23px"
+              />
             </div>
           </motion.div>
 
         </div>
       </Container>
     </section>
+  );
+}
+
+// Animated stat counter component
+function StatCounter({
+  value,
+  label,
+  color,
+  delay,
+  width,
+  gap,
+}: {
+  value: string;
+  label: string;
+  color: string;
+  delay: number;
+  width: string;
+  gap: string;
+}) {
+  const target = parseStatNumber(value);
+  const suffix = parseSuffix(value);
+  const { count, ref } = useCountUp(target, 1500);
+
+  return (
+    <motion.div
+      className="flex flex-col items-center"
+      style={{ gap, width }}
+      initial={{ opacity: 0, scale: 0.5 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay, type: 'spring', stiffness: 100, damping: 12 }}
+    >
+      <motion.span
+        ref={ref}
+        whileHover={{ scale: 1.1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+        style={{
+          color,
+          fontFamily: '"Roboto", sans-serif',
+          fontSize: '50px',
+          fontWeight: 700,
+          lineHeight: '30px',
+          textAlign: 'center',
+          cursor: 'default',
+        }}
+      >
+        {count}{suffix}
+      </motion.span>
+      <span
+        style={{
+          color: 'var(--color-text-primary, #FFFFFF)',
+          fontFamily: '"Roboto", sans-serif',
+          fontSize: '20px',
+          fontWeight: 700,
+          lineHeight: '30px',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {label}
+      </span>
+    </motion.div>
   );
 }

@@ -1,59 +1,133 @@
+import { motion, type Variants } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Container, Logo } from '@/components/common';
+import { fadeInUp, viewportSettings } from '@/lib/animations';
 
-// Footer link data matching Figma
-const footerLinks = {
-  product: [
-    { label: 'Watch demo', href: '#' },
-    { label: 'Pricing', href: '#' },
-    { label: 'Paid vs Free', href: '#' },
-    { label: 'Accessibility', href: '#' },
-    { label: 'Change log', href: '#' },
-    { label: 'Status', href: '#' },
-  ],
-  features: [
-    { label: 'Channels', href: '#' },
-    { label: 'Search', href: '#' },
-    { label: 'App & Integrations', href: '#' },
-    { label: 'Security', href: '#' },
-    { label: 'Enterprise Key', href: '#' },
-  ],
-  solutions: [
-    { label: 'Customer service', href: '#' },
-    { label: 'Sales', href: '#' },
-    { label: 'Project management', href: '#' },
-    { label: 'Marketing', href: '#' },
-    { label: 'Security', href: '#' },
-    { label: 'Media', href: '#' },
-  ],
-  resources: [
-    { label: 'Help Center', href: '#' },
-    { label: "What's new", href: '#' },
-    { label: 'Resource library', href: '#' },
-    { label: 'Community', href: '#' },
-    { label: 'Events', href: '#' },
-  ],
-  company: [
-    { label: 'About us', href: '#' },
-    { label: 'News', href: '#' },
-    { label: 'Media Kit', href: '#' },
-    { label: 'Career', href: '#' },
-    { label: 'Contact us', href: '#contact' },
-  ],
+// Stagger container for footer columns
+const footerStagger: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
 };
 
+const footerItem: Variants = {
+  hidden: { opacity: 0, y: 25 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 80, damping: 14 },
+  },
+};
+
+// Social icons stagger
+const socialStagger: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.3 },
+  },
+};
+
+const socialItem: Variants = {
+  hidden: { opacity: 0, scale: 0, y: 10 },
+  visible: {
+    opacity: 0.7,
+    scale: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 200, damping: 12 },
+  },
+};
+
+// Footer link structure — labels are i18n keys
+const footerLinkSections = [
+  {
+    titleKey: 'footer.company',
+    links: [
+      { labelKey: 'footer.about', href: '#' },
+      { labelKey: 'footer.features', href: '#' },
+      { labelKey: 'footer.works', href: '#' },
+      { labelKey: 'footer.career', href: '#' },
+    ],
+  },
+  {
+    titleKey: 'footer.help',
+    links: [
+      { labelKey: 'footer.support', href: '#' },
+      { labelKey: 'footer.deliveryDetails', href: '#' },
+      { labelKey: 'footer.terms', href: '#' },
+      { labelKey: 'footer.privacy', href: '#' },
+    ],
+  },
+  {
+    titleKey: 'footer.resources',
+    links: [
+      { labelKey: 'footer.freeEbooks', href: '#' },
+      { labelKey: 'footer.howToBlog', href: '#blog' },
+      { labelKey: 'footer.subscription', href: '#' },
+    ],
+  },
+];
+
+// Footer Link with hover animation - defined outside component
+function FooterLink({ href, label }: { href: string; label: string }) {
+  return (
+    <motion.a
+      href={href}
+      initial={{ x: 0, color: 'var(--color-text-secondary, #9CA3AF)' }}
+      whileHover={{ x: 4, color: 'var(--color-text-primary, #FFFFFF)' }}
+      transition={{ duration: 0.2 }}
+      style={{
+        fontFamily: '"Inter", sans-serif',
+        fontSize: '12px',
+        fontWeight: 400,
+        lineHeight: '20px',
+        textDecoration: 'none',
+        display: 'inline-block',
+      }}
+    >
+      {label}
+    </motion.a>
+  );
+}
+
+// Social Icon with hover animation - defined outside component
+function SocialIcon({ href, ariaLabel, children }: { href: string; ariaLabel: string; children: React.ReactNode }) {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={ariaLabel}
+      initial={{ scale: 1, opacity: 0.7 }}
+      whileHover={{ scale: 1.2, opacity: 1 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+      style={{ color: 'var(--color-text-secondary, #9CA3AF)', display: 'flex' }}
+    >
+      {children}
+    </motion.a>
+  );
+}
+
 export function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
     <footer
       style={{
-        backgroundColor: '#1F2937',
+        backgroundColor: 'var(--color-bg-primary, #1F2937)',
         width: '100%',
       }}
     >
       {/* Main Footer Content */}
       <Container>
-        <div
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportSettings}
+          variants={footerStagger}
           style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -63,7 +137,7 @@ export function Footer() {
           }}
         >
           {/* Logo & Copyright Section */}
-          <div style={{ maxWidth: '280px' }}>
+          <motion.div variants={footerItem} style={{ maxWidth: '280px' }}>
             {/* Logo */}
             <div style={{ marginBottom: '20px' }}>
               <Logo size="lg" />
@@ -72,203 +146,52 @@ export function Footer() {
             {/* Copyright Text */}
             <p
               style={{
-                color: '#9CA3AF',
+                color: 'var(--color-text-secondary, #9CA3AF)',
                 fontFamily: '"Inter", sans-serif',
                 fontSize: '12px',
                 fontWeight: 400,
                 lineHeight: '20px',
               }}
             >
-              Copyright © {currentYear} All rights reserved |
-              <br />
-              OUTAI software design and programming
-              <br />
-              company
+              {t('footer.copyright', { year: currentYear, defaultValue: `Copyright © ${currentYear} All rights reserved | OUTAI` })}
             </p>
-          </div>
+          </motion.div>
 
           {/* Links Columns */}
           <div style={{ display: 'flex', gap: '60px' }}>
-            {/* Product */}
-            <div>
-              <h4
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  lineHeight: '20px',
-                  marginBottom: '16px',
-                }}
-              >
-                Product
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {footerLinks.product.map((link) => (
-                  <li key={link.label} style={{ marginBottom: '8px' }}>
-                    <a
-                      href={link.href}
-                      style={{
-                        color: '#9CA3AF',
-                        fontFamily: '"Inter", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Features */}
-            <div>
-              <h4
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  lineHeight: '20px',
-                  marginBottom: '16px',
-                }}
-              >
-                Features
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {footerLinks.features.map((link) => (
-                  <li key={link.label} style={{ marginBottom: '8px' }}>
-                    <a
-                      href={link.href}
-                      style={{
-                        color: '#9CA3AF',
-                        fontFamily: '"Inter", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Solutions */}
-            <div>
-              <h4
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  lineHeight: '20px',
-                  marginBottom: '16px',
-                }}
-              >
-                Solutions
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {footerLinks.solutions.map((link) => (
-                  <li key={link.label} style={{ marginBottom: '8px' }}>
-                    <a
-                      href={link.href}
-                      style={{
-                        color: '#9CA3AF',
-                        fontFamily: '"Inter", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h4
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  lineHeight: '20px',
-                  marginBottom: '16px',
-                }}
-              >
-                Resources
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {footerLinks.resources.map((link) => (
-                  <li key={link.label} style={{ marginBottom: '8px' }}>
-                    <a
-                      href={link.href}
-                      style={{
-                        color: '#9CA3AF',
-                        fontFamily: '"Inter", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h4
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  lineHeight: '20px',
-                  marginBottom: '16px',
-                }}
-              >
-                Company
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {footerLinks.company.map((link) => (
-                  <li key={link.label} style={{ marginBottom: '8px' }}>
-                    <a
-                      href={link.href}
-                      style={{
-                        color: '#9CA3AF',
-                        fontFamily: '"Inter", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {footerLinkSections.map((section) => (
+              <motion.div key={section.titleKey} variants={footerItem}>
+                <h4
+                  style={{
+                    color: 'var(--color-text-primary, #FFFFFF)',
+                    fontFamily: '"Inter", sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    lineHeight: '20px',
+                    marginBottom: '16px',
+                  }}
+                >
+                  {t(section.titleKey)}
+                </h4>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {section.links.map((link) => (
+                    <li key={link.labelKey} style={{ marginBottom: '8px' }}>
+                      <FooterLink href={link.href} label={t(link.labelKey)} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
       </Container>
 
-      {/* Bottom Bar */}
-      <div
+      {/* Bottom Bar — slide up entrance */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         style={{
           borderTop: '1px solid rgba(255, 255, 255, 0.1)',
         }}
@@ -290,14 +213,14 @@ export function Footer() {
                 <LocationIcon />
                 <span
                   style={{
-                    color: '#9CA3AF',
+                    color: 'var(--color-text-secondary, #9CA3AF)',
                     fontFamily: '"Inter", sans-serif',
                     fontSize: '12px',
                     fontWeight: 400,
                     lineHeight: '20px',
                   }}
                 >
-                  Boulevard de Marseille, Zone 4C, Marcory, Abidjan, Côte d'Ivoire
+                  {t('footer.address')}
                 </span>
               </div>
 
@@ -307,7 +230,7 @@ export function Footer() {
                 <a
                   href="mailto:contact@outai.com"
                   style={{
-                    color: '#9CA3AF',
+                    color: 'var(--color-text-secondary, #9CA3AF)',
                     fontFamily: '"Inter", sans-serif',
                     fontSize: '12px',
                     fontWeight: 400,
@@ -325,7 +248,7 @@ export function Footer() {
                 <a
                   href="tel:+1234567890"
                   style={{
-                    color: '#9CA3AF',
+                    color: 'var(--color-text-secondary, #9CA3AF)',
                     fontFamily: '"Inter", sans-serif',
                     fontSize: '12px',
                     fontWeight: 400,
@@ -338,50 +261,44 @@ export function Footer() {
               </div>
             </div>
 
-            {/* Right - Social Icons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {/* Right - Social Icons — stagger bounce */}
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={socialStagger}
+              style={{ display: 'flex', alignItems: 'center', gap: '16px' }}
+            >
               {/* Twitter */}
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#9CA3AF' }}
-                aria-label="Twitter"
-              >
+              <motion.div variants={socialItem}>
+                <SocialIcon href="#" ariaLabel="Twitter">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
-              </a>
+              </SocialIcon>
+              </motion.div>
 
               {/* Facebook */}
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#9CA3AF' }}
-                aria-label="Facebook"
-              >
+              <motion.div variants={socialItem}>
+              <SocialIcon href="#" ariaLabel="Facebook">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
-              </a>
+              </SocialIcon>
+              </motion.div>
 
               {/* LinkedIn */}
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#9CA3AF' }}
-                aria-label="LinkedIn"
-              >
+              <motion.div variants={socialItem}>
+              <SocialIcon href="#" ariaLabel="LinkedIn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                 </svg>
-              </a>
-            </div>
+              </SocialIcon>
+              </motion.div>
+            </motion.div>
           </div>
         </Container>
-      </div>
+      </motion.div>
     </footer>
   );
 }

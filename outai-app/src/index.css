@@ -12,12 +12,17 @@
   --color-bg-secondary: #1F2937;
   --color-bg-tertiary: #161B22;
   --color-bg-header: #1F2937;
+  --color-bg-header-rgb: 31, 41, 55;
   --color-bg-cell: #25303F;
   --color-bg-hero: #263140;
+  --color-bg-card: #374151;
+  --color-bg-card-border: #4B5563;
   --color-text-primary: #FFFFFF;
   --color-text-secondary: #A0AEC0;
   --color-text-muted: #718096;
   --color-border: #2D3748;
+  --color-shadow-dark: #1c1c1c;
+  --color-yellow-accent: #FADF23;
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -42,11 +47,41 @@
   --color-bg-secondary: #F7FAFC;
   --color-bg-tertiary: #EDF2F7;
   --color-bg-header: #FFFFFF;
+  --color-bg-header-rgb: 255, 255, 255;
   --color-bg-cell: #F1F5F9;
+  --color-bg-hero: #F0F4F8;
+  --color-bg-card: #F9FAFB;
+  --color-bg-card-border: #D1D5DB;
   --color-text-primary: #111827;
   --color-text-secondary: #4A5568;
   --color-text-muted: #718096;
   --color-border: #E2E8F0;
+  --color-shadow-dark: #CBD5E1;
+  --color-yellow-accent: #EAB308;
+}
+
+/* Admin Theme — always dark regardless of site theme
+   Uses !important on custom properties to override [data-theme="light"] on <html>. */
+.admin-theme,
+[data-theme="light"] .admin-theme {
+  --color-bg-primary: #0f1419 !important;
+  --color-bg-secondary: #151b23 !important;
+  --color-bg-tertiary: #0d1117 !important;
+  --color-bg-header: #151b23 !important;
+  --color-bg-cell: #1c2432 !important;
+  --color-bg-hero: #1c2432 !important;
+  --color-bg-card: #222d3d !important;
+  --color-bg-card-border: #2d3a4d !important;
+  --color-text-primary: #ecf0f5 !important;
+  --color-text-secondary: #8b95a5 !important;
+  --color-text-muted: #5c6878 !important;
+  --color-border: #253045 !important;
+  --color-shadow-dark: #080b0f !important;
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.2) !important;
+  --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.3), 0 2px 6px -2px rgb(0 0 0 / 0.25) !important;
+  --shadow-lg: 0 12px 20px -3px rgb(0 0 0 / 0.35), 0 4px 8px -4px rgb(0 0 0 / 0.3) !important;
+  --shadow-xl: 0 22px 30px -5px rgb(0 0 0 / 0.4), 0 8px 12px -6px rgb(0 0 0 / 0.35) !important;
+  color-scheme: dark !important;
 }
 
 /* Base Styles */
@@ -151,10 +186,10 @@ input, textarea, select {
 /* Animation Keyframes */
 @keyframes float {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(-50%) rotate(12deg) scale(1.4);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(calc(-50% - 15px)) rotate(12deg) scale(1.4);
   }
 }
 
@@ -190,6 +225,45 @@ input, textarea, select {
   }
 }
 
+/* CTA shimmer sweep */
+@keyframes cta-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+.hero-cta-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  animation: cta-shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Contact form focus glow */
+.contact-input-glow:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(1, 165, 50, 0.3), 0 0 12px rgba(122, 201, 14, 0.15);
+  border-color: rgba(1, 165, 50, 0.5) !important;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.contact-input-glow {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
@@ -208,6 +282,14 @@ input, textarea, select {
 }
 
 /* Utility Classes */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .gradient-text {
   background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
   -webkit-background-clip: text;

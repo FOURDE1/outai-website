@@ -191,7 +191,7 @@
     "freeEbooks": "كتب إلكترونية مجانية",
     "howToBlog": "مدونة كيف",
     "subscription": "الاشتراك",
-    "copyright": "© 2024 أوتاي. جميع الحقوق محفوظة.",
+    "copyright": "© {{year}} أوتاي. جميع الحقوق محفوظة.",
     "social": {
       "facebook": "فيسبوك",
       "twitter": "تويتر",
@@ -199,6 +199,24 @@
       "linkedin": "لينكد إن"
     },
     "address": "6 سويسون دو مارسيليا، المنطقة 42، ماركوري، أبيدجان، ساحل العاج"
+  },
+  "lastMileB2B": {
+    "pageTitle": "الميل الأخير B2B",
+    "description": "سيقوم مساعدونا بالتقاط وتوصيل مشترياتك مباشرة إلى الوجهة مع أسطول متعدد المركبات ونظام تتبع مصمم لاحتياجاتك اللوجستية.",
+    "tagline": "على طريقة OUTAi",
+    "formTitle": "طلب توصيل",
+    "pickup": "نقطة الاستلام",
+    "pickupPlaceholder": "أدخل موقع الاستلام",
+    "destination": "الوجهة",
+    "destinationPlaceholder": "أدخل عنوان الوجهة",
+    "expectedTime": "الوقت المتوقع للتسليم",
+    "expectedTimePlaceholder": "حدد وقت التسليم",
+    "itemsDescription": "وصف العناصر",
+    "itemsDescriptionPlaceholder": "صف العناصر المراد توصيلها...",
+    "submit": "إرسال",
+    "submitting": "جاري الإرسال...",
+    "successMessage": "تم تقديم طلب التوصيل بنجاح!",
+    "errorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
   },
   "errors": {
     "required": "هذا الحقل مطلوب",

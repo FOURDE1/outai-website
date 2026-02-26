@@ -32,17 +32,17 @@ export function Contact() {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Required';
+      newErrors.name = t('errors.required');
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Required';
+      newErrors.email = t('errors.required');
     } else if (!isValidEmail(formData.email)) {
-      newErrors.email = 'Invalid email';
+      newErrors.email = t('errors.invalidEmail');
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = 'Required';
+      newErrors.message = t('errors.required');
     }
 
     setErrors(newErrors);
@@ -63,9 +63,9 @@ export function Contact() {
     toast.success(t('contact.successMessage'), {
       duration: 5000,
       style: {
-        background: '#1F2937',
-        color: '#FFFFFF',
-        border: '1px solid #374151',
+        background: 'var(--color-bg-primary, #1F2937)',
+        color: 'var(--color-text-primary, #FFFFFF)',
+        border: '1px solid var(--color-bg-card, #374151)',
       },
     });
 
@@ -90,7 +90,7 @@ export function Contact() {
     <section
       id="contact"
       style={{
-        backgroundColor: '#1F2937',
+        backgroundColor: 'var(--color-bg-primary, #1F2937)',
         width: '100%',
         paddingTop: '50px',
         paddingBottom: '80px',
@@ -122,20 +122,20 @@ export function Contact() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <h2
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Sulphur Point", sans-serif',
                   fontSize: '32px',
                   fontWeight: 700,
                   lineHeight: '40px',
                 }}
               >
-                Reach Out to OUTAI,
+                {t('contact.sectionTitle')}
                 <br />
-                We're Here to Help!
+                {t('contact.sectionSubtitle')}
               </h2>
               <p
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Inter", sans-serif',
                   fontSize: '16px',
                   fontWeight: 300,
@@ -143,8 +143,7 @@ export function Contact() {
                   maxWidth: '468px',
                 }}
               >
-                Got a question or need assistance? Contact us for quick, helpful
-                support from the OUTAI team. We're just a message away!
+                {t('contact.sectionDescription')}
               </p>
             </div>
 
@@ -152,18 +151,22 @@ export function Contact() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Roboto", sans-serif',
                   fontSize: '20px',
                   fontWeight: 700,
                   lineHeight: '24px',
                 }}
               >
-                Our Office
+                {t('contact.office.title')}
               </h3>
               
               {/* Office Image / Map */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
                 style={{
                   width: '600px',
                   height: '300px',
@@ -179,9 +182,9 @@ export function Contact() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="OUTAI Office Location"
+                  title={t('contact.iframeTitle')}
                 />
-              </div>
+              </motion.div>
             </div>
 
             {/* Location & Contact Info */}
@@ -190,50 +193,64 @@ export function Contact() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <h4
                   style={{
-                    color: '#FFFFFF',
+                    color: 'var(--color-text-primary, #FFFFFF)',
                     fontFamily: '"Roboto", sans-serif',
                     fontSize: '16px',
                     fontWeight: 700,
                     lineHeight: '24px',
                   }}
                 >
-                  Location
+                  {t('contact.location')}
                 </h4>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                  <LocationIcon />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4 }}
+                  style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}
+                >
+                  <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.1 }}>
+                    <LocationIcon />
+                  </motion.div>
                   <p
                     style={{
-                      color: '#FFFFFF',
+                      color: 'var(--color-text-primary, #FFFFFF)',
                       fontFamily: '"Inter", sans-serif',
                       fontSize: '12px',
                       fontWeight: 400,
                       lineHeight: '24px',
                     }}
                   >
-                    Boulevard de Marseille, Zone 4C, Marcory,
-                    <br />
-                    Abidjan, Côte d'Ivoire
+                    {t('contact.address')}
                   </p>
-                </div>
+                </motion.div>
               </div>
 
               {/* Contact Info */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <h4
                   style={{
-                    color: '#FFFFFF',
+                    color: 'var(--color-text-primary, #FFFFFF)',
                     fontFamily: '"Roboto", sans-serif',
                     fontSize: '16px',
                     fontWeight: 700,
                     lineHeight: '24px',
                   }}
                 >
-                  Contact info
+                  {t('contact.email_label')}
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {/* Email */}
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <EmailIcon />
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                    style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+                  >
+                    <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.2 }}>
+                      <EmailIcon />
+                    </motion.div>
                     <a
                       href="mailto:Customercare@outai.com"
                       style={{
@@ -247,14 +264,22 @@ export function Contact() {
                     >
                       Customercare@outai.com
                     </a>
-                  </div>
+                  </motion.div>
                   
                   {/* Phone */}
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <PhoneIcon />
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+                  >
+                    <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.3 }}>
+                      <PhoneIcon />
+                    </motion.div>
                     <span
                       style={{
-                        color: '#FFFFFF',
+                        color: 'var(--color-text-primary, #FFFFFF)',
                         fontFamily: '"Inter", sans-serif',
                         fontSize: '12px',
                         fontWeight: 400,
@@ -263,23 +288,31 @@ export function Contact() {
                     >
                       +27 16 1538525
                     </span>
-                  </div>
+                  </motion.div>
                   
                   {/* Hours */}
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <CalendarIcon />
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.3 }}
+                    style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+                  >
+                    <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.4 }}>
+                      <CalendarIcon />
+                    </motion.div>
                     <span
                       style={{
-                        color: '#FFFFFF',
+                        color: 'var(--color-text-primary, #FFFFFF)',
                         fontFamily: '"Inter", sans-serif',
                         fontSize: '12px',
                         fontWeight: 400,
                         lineHeight: '24px',
                       }}
                     >
-                      Sat - Thu: 7am - 4:30pm
+                      {t('contact.hours')}
                     </span>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </div>
@@ -310,7 +343,7 @@ export function Contact() {
             >
               <h3
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Sulphur Point", sans-serif',
                   fontSize: '32px',
                   fontWeight: 700,
@@ -318,11 +351,11 @@ export function Contact() {
                   textAlign: 'center',
                 }}
               >
-                Contact Us
+                {t('contact.formTitle')}
               </h3>
               <p
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Inter", sans-serif',
                   fontSize: '14px',
                   fontWeight: 300,
@@ -331,8 +364,7 @@ export function Contact() {
                   maxWidth: '276px',
                 }}
               >
-                If you have any queries, please fill out the form below. We're
-                here to assist you.
+                {t('contact.formDescription')}
               </p>
             </div>
 
@@ -348,10 +380,16 @@ export function Contact() {
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 {/* Name Input */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0 }}
+                >
                 <div
                   style={{
-                    backgroundColor: '#25303F',
-                    border: '1px solid #6B7280',
+                    backgroundColor: 'var(--color-bg-cell, #25303F)',
+                    border: '1px solid var(--color-bg-card-border, #6B7280)',
                     borderRadius: '4px',
                     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
                     height: '30px',
@@ -362,14 +400,19 @@ export function Contact() {
                 >
                   <input
                     type="text"
+                    id="contact-name"
                     name="name"
-                    placeholder="Enter your full name"
+                    className="contact-input-glow"
+                    placeholder={t('contact.namePlaceholder')}
                     value={formData.name}
                     onChange={handleChange}
+                    aria-label={t('contact.namePlaceholder')}
+                    aria-required="true"
+                    aria-invalid={!!errors.name}
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#FFFFFF',
+                      color: 'var(--color-text-primary, #FFFFFF)',
                       fontFamily: '"Inter", sans-serif',
                       fontSize: '14px',
                       fontWeight: 400,
@@ -379,12 +422,19 @@ export function Contact() {
                     }}
                   />
                 </div>
+                </motion.div>
 
                 {/* Email Input */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                >
                 <div
                   style={{
-                    backgroundColor: '#25303F',
-                    border: '1px solid #6B7280',
+                    backgroundColor: 'var(--color-bg-cell, #25303F)',
+                    border: '1px solid var(--color-bg-card-border, #6B7280)',
                     borderRadius: '4px',
                     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
                     height: '30px',
@@ -395,14 +445,19 @@ export function Contact() {
                 >
                   <input
                     type="email"
+                    id="contact-email"
                     name="email"
-                    placeholder="Enter a valid email address"
+                    className="contact-input-glow"
+                    placeholder={t('contact.emailPlaceholder')}
                     value={formData.email}
                     onChange={handleChange}
+                    aria-label={t('contact.emailPlaceholder')}
+                    aria-required="true"
+                    aria-invalid={!!errors.email}
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#FFFFFF',
+                      color: 'var(--color-text-primary, #FFFFFF)',
                       fontFamily: '"Inter", sans-serif',
                       fontSize: '14px',
                       fontWeight: 400,
@@ -412,12 +467,19 @@ export function Contact() {
                     }}
                   />
                 </div>
+                </motion.div>
 
                 {/* Message Textarea */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                >
                 <div
                   style={{
-                    backgroundColor: '#25303F',
-                    border: '1px solid #6B7280',
+                    backgroundColor: 'var(--color-bg-cell, #25303F)',
+                    border: '1px solid var(--color-bg-card-border, #6B7280)',
                     borderRadius: '4px',
                     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
                     height: '100px',
@@ -426,14 +488,19 @@ export function Contact() {
                   }}
                 >
                   <textarea
+                    id="contact-message"
                     name="message"
-                    placeholder="Write a message..."
+                    className="contact-input-glow"
+                    placeholder={t('contact.messagePlaceholder')}
                     value={formData.message}
                     onChange={handleChange}
+                    aria-label={t('contact.messagePlaceholder')}
+                    aria-required="true"
+                    aria-invalid={!!errors.message}
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#FFFFFF',
+                      color: 'var(--color-text-primary, #FFFFFF)',
                       fontFamily: '"Inter", sans-serif',
                       fontSize: '14px',
                       fontWeight: 400,
@@ -457,15 +524,24 @@ export function Contact() {
                     </svg>
                   </div>
                 </div>
+                </motion.div>
               </div>
 
               {/* Submit Button */}
-              <button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
+                aria-busy={isSubmitting}
+                className="contact-submit-shimmer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.05, boxShadow: '0 15px 40px rgba(1, 165, 50, 0.5)' }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
                 style={{
-                  backgroundColor: '#01A532',
-                  border: '1px solid #01A532',
+                  backgroundColor: 'var(--color-primary, #01A532)',
+                  border: '1px solid var(--color-primary, #01A532)',
                   borderRadius: '12px',
                   height: '38px',
                   display: 'flex',
@@ -477,16 +553,16 @@ export function Contact() {
               >
                 <span
                   style={{
-                    color: '#FFFFFF',
+                    color: 'var(--color-text-primary, #FFFFFF)',
                     fontFamily: '"Roboto", sans-serif',
                     fontSize: '16px',
                     fontWeight: 500,
                     lineHeight: '24px',
                   }}
                 >
-                  {isSubmitting ? 'Sending...' : 'Submit'}
+                  {isSubmitting ? t('common.loading') : t('common.submit')}
                 </span>
-              </button>
+              </motion.button>
             </form>
           </motion.div>
         </div>

@@ -15,7 +15,9 @@
     "theme": "Theme",
     "dark": "Dark",
     "light": "Light",
-    "system": "System"
+    "system": "System",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
   },
   "nav": {
     "home": "Home",
@@ -28,7 +30,8 @@
     "title": "Move in comfort.",
     "subtitle": "Every journey counts",
     "description": "Design your journey with expert drivers and premium limousines. OUTAi ensures refined comfort and monitored rides in major cities, delivering efficiency without compromise",
-    "cta": "Contact us on Whatsapp"
+    "cta": "Contact us on Whatsapp",
+    "phoneAlt": "OUTAI App"
   },
   "craftJourney": {
     "sectionTitle": "Craft your",
@@ -51,7 +54,8 @@
     "sectionTitle": "Reshaping the Transportation and Movement Scene",
     "sectionDescription": "With our app, users can access affordable ridges at their fingertips, premium transport at Competitive prices, strategic directions, and faster routes, where your transportation experience is taken to the next level, and your business needs are served best. Sophisticated travel and moving, while being efficient and connected.",
     "successfulRides": "Successful Rides",
-    "businessClients": "Business Clients"
+    "businessClients": "Business Clients",
+    "imageAlt": "Car keys handover"
   },
   "services": {
     "sectionTag": "SERVICES",
@@ -146,7 +150,10 @@
     },
     "location": "Location",
     "phone_label": "Phone",
-    "email_label": "Email"
+    "email_label": "Contact info",
+    "hours": "Sat - Thu: 7am - 4:30pm",
+    "iframeTitle": "OUTAI Office Location",
+    "address": "Boulevard de Marseille, Zone 4C, Marcory, Abidjan, Côte d'Ivoire"
   },
   "faq": {
     "sectionTag": "FREQUENTLY ASKED QUESTIONS",
@@ -199,7 +206,7 @@
     "freeEbooks": "Free eBooks",
     "howToBlog": "How to - Blog",
     "subscription": "Subscription",
-    "copyright": "© 2024 OUTAI. All rights reserved.",
+    "copyright": "© {{year}} OUTAI. All rights reserved.",
     "social": {
       "facebook": "Facebook",
       "twitter": "Twitter",
@@ -207,6 +214,24 @@
       "linkedin": "LinkedIn"
     },
     "address": "6 Souissons de Marseille, Zone 42, Marcory, Abidjan, Cote d'Ivoire"
+  },
+  "lastMileB2B": {
+    "pageTitle": "Last Mile B2B",
+    "description": "OUR ASSISTANTS can also pick up or assist you in carrying out your errands, call and book your needs. We make sure that all is delivered in ease and to all the luxury you require.",
+    "tagline": "CRAFT THE OUTAi Way",
+    "formTitle": "Request a Delivery",
+    "pickup": "Pick up",
+    "pickupPlaceholder": "Enter pickup location",
+    "destination": "Destination",
+    "destinationPlaceholder": "Enter destination address",
+    "expectedTime": "Expected time to deliver",
+    "expectedTimePlaceholder": "Select delivery time",
+    "itemsDescription": "Items Description",
+    "itemsDescriptionPlaceholder": "Describe the items to be delivered...",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "successMessage": "Your delivery request has been submitted successfully!",
+    "errorMessage": "Something went wrong. Please try again."
   },
   "errors": {
     "required": "This field is required",

@@ -1,0 +1,147 @@
+/* ========================================================
+   OUTAI Admin Panel — Dedicated Styles
+   These override ALL theme contexts to ensure the admin
+   panel always renders in dark mode.
+   ======================================================== */
+
+/* Admin color tokens (hardcoded dark palette) */
+.admin-theme {
+  /* Backgrounds */
+  --admin-bg: #0f1419;
+  --admin-bg-secondary: #151b23;
+  --admin-bg-surface: #1c2432;
+  --admin-bg-elevated: #222d3d;
+  --admin-bg-hover: #253045;
+
+  /* Text */
+  --admin-text: #ecf0f5;
+  --admin-text-secondary: #8b95a5;
+  --admin-text-muted: #5c6878;
+
+  /* Borders */
+  --admin-border: #253045;
+  --admin-border-light: #1e2a3a;
+
+  /* Accent */
+  --admin-accent: #7AC90E;
+  --admin-accent-end: #01A532;
+
+  /* Shadows */
+  --admin-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.25), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+  --admin-shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.35), 0 2px 6px -2px rgb(0 0 0 / 0.3);
+  --admin-shadow-lg: 0 12px 20px -3px rgb(0 0 0 / 0.4), 0 4px 8px -4px rgb(0 0 0 / 0.35);
+}
+
+/* Admin card component */
+.admin-card {
+  background-color: #1c2432;
+  border: 1px solid #253045;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.25), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+}
+
+.admin-card:hover {
+  box-shadow: 0 4px 8px -1px rgb(0 0 0 / 0.35), 0 2px 6px -2px rgb(0 0 0 / 0.3);
+}
+
+/* Admin input styling */
+.admin-input {
+  background-color: #0f1419;
+  border: 1px solid #253045;
+  border-radius: 12px;
+  color: #ecf0f5;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.admin-input:focus {
+  border-color: #7AC90E;
+  box-shadow: 0 0 0 3px rgba(122, 201, 14, 0.15);
+}
+
+.admin-input::placeholder {
+  color: #5c6878;
+}
+
+/* Admin table styling */
+.admin-table th {
+  color: #5c6878;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #253045;
+}
+
+.admin-table td {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #1e2a3a;
+}
+
+.admin-table tr:hover td {
+  background-color: rgba(28, 36, 50, 0.5);
+}
+
+/* Admin button — primary (green gradient) */
+.admin-btn-primary {
+  background: linear-gradient(135deg, #7AC90E, #01A532);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(1, 165, 50, 0.25);
+  transition: all 0.2s;
+}
+
+.admin-btn-primary:hover {
+  box-shadow: 0 4px 20px rgba(1, 165, 50, 0.35);
+}
+
+.admin-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.admin-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Admin button — secondary (outlined) */
+.admin-btn-secondary {
+  color: #8b95a5;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #253045;
+  transition: all 0.2s;
+}
+
+.admin-btn-secondary:hover {
+  color: #ecf0f5;
+  background-color: #1c2432;
+}
+
+/* Admin select dropdown fix for dark mode */
+.admin-theme select option {
+  background-color: #1c2432;
+  color: #ecf0f5;
+}
+
+/* Force all admin scrollbar dark */
+.admin-theme ::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+.admin-theme ::-webkit-scrollbar-thumb {
+  background: #253045;
+  border-radius: 4px;
+}
+
+.admin-theme ::-webkit-scrollbar-thumb:hover {
+  background: #2d3a4d;
+}

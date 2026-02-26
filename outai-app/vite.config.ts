@@ -18,6 +18,7 @@ export default defineConfig({
           vendor: ['react', 'react-dom', 'react-router-dom'],
           animations: ['framer-motion'],
           i18n: ['i18next', 'react-i18next'],
+          admin: ['react-hook-form', 'zod', '@hookform/resolvers', 'recharts'],
         },
       },
     },
