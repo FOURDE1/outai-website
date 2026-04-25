@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Container } from '@/components/common';
 import { viewportSettings } from '@/lib/animations';
 import { useVisibleServices } from '@/contexts/CmsContext';
+import { useDeviceCapability } from '@/hooks/useDeviceCapability';
 
 // Stagger header variants
 const headerContainer: Variants = {
@@ -23,74 +24,95 @@ const headerItem: Variants = {
   },
 };
 
-// Service Card Component
-function ServiceCard({ 
-  iconName, 
-  title, 
+// ──────────────────────────────────────────────────────────
+// 3D Tilt Card — CSS perspective-based mouse-tracking tilt
+// ──────────────────────────────────────────────────────────
+function ServiceCard({
+  iconName,
+  title,
   description,
-  index
-}: { 
-  iconName: string; 
-  title: string; 
+  index,
+  isMobile,
+}: {
+  iconName: string;
+  title: string;
   description: string;
   index: number;
+  isMobile: boolean;
 }) {
   const { t } = useTranslation();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
 
-  // Icon components for each service
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isMobile || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    setTilt({
+      rotateX: (y - 0.5) * -12,
+      rotateY: (x - 0.5) * 12,
+    });
+    setGlowPos({ x: x * 100, y: y * 100 });
+  }, [isMobile]);
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ rotateX: 0, rotateY: 0 });
+    setGlowPos({ x: 50, y: 50 });
+  }, []);
+
   const icons: Record<string, ReactElement> = {
     car: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 6L19 10H5L8 6H16ZM16 6H8M19 10V17C19 17.5523 18.5523 18 18 18H17C16.4477 18 16 17.5523 16 17V16H8V17C8 17.5523 7.55228 18 7 18H6C5.44772 18 5 17.5523 5 17V10M7.5 13H7.51M16.5 13H16.51" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M16 6L19 10H5L8 6H16ZM16 6H8M19 10V17C19 17.5523 18.5523 18 18 18H17C16.4477 18 16 17.5523 16 17V16H8V17C8 17.5523 7.55228 18 7 18H6C5.44772 18 5 17.5523 5 17V10M7.5 13H7.51M16.5 13H16.51" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
     calendar: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="4" width="18" height="18" rx="2" stroke="white" strokeWidth="2"/>
-        <path d="M16 2V6M8 2V6M3 10H21" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <rect x="7" y="14" width="4" height="4" rx="0.5" fill="white"/>
+        <rect x="3" y="4" width="18" height="18" rx="2" stroke="white" strokeWidth="2" />
+        <path d="M16 2V6M8 2V6M3 10H21" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        <rect x="7" y="14" width="4" height="4" rx="0.5" fill="white" />
       </svg>
     ),
     cab: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 11L6.5 6.5C6.8 5.6 7.6 5 8.5 5H15.5C16.4 5 17.2 5.6 17.5 6.5L19 11M5 11V18C5 18.6 5.4 19 6 19H7C7.6 19 8 18.6 8 18V17H16V18C16 18.6 16.4 19 17 19H18C18.6 19 19 18.6 19 18V11M5 11H19M7.5 14H8.5M15.5 14H16.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M10 2H14V5H10V2Z" stroke="white" strokeWidth="2"/>
+        <path d="M5 11L6.5 6.5C6.8 5.6 7.6 5 8.5 5H15.5C16.4 5 17.2 5.6 17.5 6.5L19 11M5 11V18C5 18.6 5.4 19 6 19H7C7.6 19 8 18.6 8 18V17H16V18C16 18.6 16.4 19 17 19H18C18.6 19 19 18.6 19 18V11M5 11H19M7.5 14H8.5M15.5 14H16.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M10 2H14V5H10V2Z" stroke="white" strokeWidth="2" />
       </svg>
     ),
     winch: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M13 16H3V18H13V16Z" fill="white"/>
-        <path d="M19 7L21 9L19 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M5 9H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M8 13L6 15L8 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M6 15H18" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M13 16H3V18H13V16Z" fill="white" />
+        <path d="M19 7L21 9L19 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M5 9H20" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        <path d="M8 13L6 15L8 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6 15H18" stroke="white" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
     delivery: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="4" width="14" height="12" rx="1" stroke="white" strokeWidth="2"/>
-        <path d="M16 8H19L22 11V16H16V8Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="6" cy="18" r="2" stroke="white" strokeWidth="2"/>
-        <circle cx="18" cy="18" r="2" stroke="white" strokeWidth="2"/>
+        <rect x="2" y="4" width="14" height="12" rx="1" stroke="white" strokeWidth="2" />
+        <path d="M16 8H19L22 11V16H16V8Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="6" cy="18" r="2" stroke="white" strokeWidth="2" />
+        <circle cx="18" cy="18" r="2" stroke="white" strokeWidth="2" />
       </svg>
     ),
   };
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ 
-        y: -12, 
-        boxShadow: '0 25px 50px rgba(1, 165, 50, 0.3)',
-        transition: { duration: 0.3 }
-      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       className="service-card"
       style={{
-        width: '328px',
-        minWidth: '328px',
+        width: isMobile ? '280px' : '328px',
+        minWidth: isMobile ? '280px' : '328px',
         height: '348px',
         backgroundColor: 'var(--color-bg-card, #374151)',
         borderRadius: '32px',
@@ -103,8 +125,25 @@ function ServiceCard({
         flexShrink: 0,
         cursor: 'pointer',
         overflow: 'hidden',
+        perspective: '800px',
+        transform: `perspective(800px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+        transition: 'transform 0.15s ease-out',
+        willChange: 'transform',
       }}
     >
+      {/* Mouse-following glow */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(1, 165, 50, 0.15) 0%, transparent 60%)`,
+          opacity: tilt.rotateX !== 0 || tilt.rotateY !== 0 ? 1 : 0,
+          transition: 'opacity 0.3s ease',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
       {/* Green gradient hover overlay */}
       <div
         className="service-card-overlay"
@@ -205,6 +244,7 @@ export function Services() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const { isMobile } = useDeviceCapability();
 
   const checkScrollButtons = useCallback(() => {
     if (scrollContainerRef.current) {
@@ -216,14 +256,14 @@ export function Services() {
 
   const scroll = useCallback((direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 358; // card width (328px) + gap (30px)
+      const scrollAmount = isMobile ? 310 : 358;
       scrollContainerRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
       });
       setTimeout(checkScrollButtons, 300);
     }
-  }, [checkScrollButtons]);
+  }, [checkScrollButtons, isMobile]);
 
   // Auto-scroll every 4 seconds
   useEffect(() => {
@@ -232,7 +272,6 @@ export function Services() {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
       const atEnd = scrollLeft >= scrollWidth - clientWidth - 10;
       if (atEnd) {
-        // Scroll back to start
         scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
         scroll('right');
@@ -255,7 +294,7 @@ export function Services() {
       }}
     >
       <Container>
-        {/* Section Header - Centered */}
+        {/* Section Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -266,7 +305,6 @@ export function Services() {
             marginBottom: '46px',
           }}
         >
-          {/* Tag */}
           <motion.p
             variants={headerItem}
             style={{
@@ -279,28 +317,24 @@ export function Services() {
           >
             {t('services.sectionTag')}
           </motion.p>
-
-          {/* Title */}
           <motion.h2
             variants={headerItem}
             style={{
               color: 'var(--color-text-primary, #FFFFFF)',
               fontFamily: '"Righteous", sans-serif',
-              fontSize: '40px',
+              fontSize: isMobile ? '28px' : '40px',
               fontWeight: 400,
               marginBottom: '20px',
             }}
           >
             {t('services.sectionTitle')}
           </motion.h2>
-
-          {/* Description */}
           <motion.p
             variants={headerItem}
             style={{
               color: 'var(--color-text-primary, #FFFFFF)',
               fontFamily: '"Inter", sans-serif',
-              fontSize: '16px',
+              fontSize: isMobile ? '14px' : '16px',
               fontWeight: 400,
               maxWidth: '649px',
               margin: '0 auto',
@@ -315,7 +349,7 @@ export function Services() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '30px',
+            gap: isMobile ? '16px' : '30px',
             justifyContent: 'center',
           }}
         >
@@ -329,7 +363,7 @@ export function Services() {
             style={{
               width: '30px',
               height: '30px',
-              display: 'flex',
+              display: isMobile ? 'none' : 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               background: 'transparent',
@@ -342,35 +376,38 @@ export function Services() {
             disabled={!canScrollLeft}
           >
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M15 18L9 12L15 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.button>
 
-          {/* Cards Container - Shows 3 cards */}
+          {/* Cards Container */}
           <div
             ref={scrollContainerRef}
             onScroll={checkScrollButtons}
             style={{
               display: 'flex',
-              gap: '30px',
+              gap: isMobile ? '16px' : '30px',
               overflowX: 'auto',
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
-              width: '1044px', // 3 cards (328px each) + 2 gaps (30px each) = 1044px
-              maxWidth: 'calc(100vw - 140px)',
+              scrollSnapType: 'x mandatory',
+              width: isMobile ? '100%' : '1044px',
+              maxWidth: isMobile ? '100%' : 'calc(100vw - 140px)',
               paddingTop: '10px',
               paddingBottom: '10px',
             }}
             className="hide-scrollbar"
           >
             {cmsServices.map((service, index) => (
-              <ServiceCard
-                key={service.id}
-                iconName={service.iconName}
-                title={lang === 'fr' ? service.titleFr : service.titleEn}
-                description={lang === 'fr' ? service.descriptionFr : service.descriptionEn}
-                index={index}
-              />
+              <div key={service.id} style={{ scrollSnapAlign: 'start' }}>
+                <ServiceCard
+                  iconName={service.iconName}
+                  title={lang === 'fr' ? service.titleFr : service.titleEn}
+                  description={lang === 'fr' ? service.descriptionFr : service.descriptionEn}
+                  index={index}
+                  isMobile={isMobile}
+                />
+              </div>
             ))}
           </div>
 
@@ -384,7 +421,7 @@ export function Services() {
             style={{
               width: '30px',
               height: '30px',
-              display: 'flex',
+              display: isMobile ? 'none' : 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               background: 'transparent',
@@ -397,13 +434,12 @@ export function Services() {
             disabled={!canScrollRight}
           >
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18L15 12L9 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M9 18L15 12L9 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.button>
         </div>
       </Container>
 
-      {/* CSS for hiding scrollbar */}
       <style>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;

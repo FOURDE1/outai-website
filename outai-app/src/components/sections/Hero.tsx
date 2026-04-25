@@ -1,8 +1,15 @@
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, type Variants } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Container } from '@/components/common';
 import { useSectionContent } from '@/contexts/CmsContext';
+import { useDeviceCapability } from '@/hooks/useDeviceCapability';
+import { HeroParticles } from './hero/HeroParticles';
+
+// Lazy-load the 3D phone — only fetched on capable desktops
+const PhoneMockup3D = lazy(() =>
+  import('./hero/PhoneMockup3D').then((mod) => ({ default: mod.PhoneMockup3D }))
+);
 
 // Demo screens data — colored placeholders representing app flows
 const demoScreens = [
@@ -36,7 +43,49 @@ const demoScreens = [
   },
 ];
 
-// Phone Demo component — interactive cycling screens with CSS phone frame
+// ──────────────────────────────────────────────────────────
+// AnimatedText — character-level staggered reveal
+// ──────────────────────────────────────────────────────────
+function AnimatedText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const words = text.split(' ');
+  return (
+    <>
+      {words.map((word, wi) => (
+        <span key={wi} style={{ display: 'inline-block', whiteSpace: 'pre' }}>
+          {word.split('').map((char, ci) => (
+            <motion.span
+              key={ci}
+              initial={{ opacity: 0, y: 30, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{
+                delay: delay + wi * 0.08 + ci * 0.03,
+                duration: 0.5,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              style={{ display: 'inline-block' }}
+            >
+              {char}
+            </motion.span>
+          ))}
+          {wi < words.length - 1 && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: delay + wi * 0.08 + word.length * 0.03, duration: 0.1 }}
+              style={{ display: 'inline-block' }}
+            >
+              {' '}
+            </motion.span>
+          )}
+        </span>
+      ))}
+    </>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// PhoneDemo — interactive cycling screens with CSS phone frame (mobile fallback)
+// ──────────────────────────────────────────────────────────
 function PhoneDemo({
   phoneAlt,
 }: {
@@ -271,10 +320,72 @@ function PhoneDemo({
   );
 }
 
+// ──────────────────────────────────────────────────────────
+// MagneticButton — subtle cursor-following hover effect
+// ──────────────────────────────────────────────────────────
+function MagneticButton({ children, href, className, style }: {
+  children: React.ReactNode;
+  href: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    setOffset({
+      x: (e.clientX - centerX) * 0.15,
+      y: (e.clientY - centerY) * 0.15,
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setOffset({ x: 0, y: 0 });
+  }, []);
+
+  return (
+    <motion.a
+      ref={ref}
+      href={href}
+      className={className}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{ x: offset.x, y: offset.y }}
+      whileHover={{
+        scale: 1.05,
+        boxShadow: '0 15px 40px rgba(1, 165, 50, 0.5)',
+      }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+      style={style}
+    >
+      {children}
+    </motion.a>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// Hero Section
+// ──────────────────────────────────────────────────────────
 export function Hero() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language === 'fr' ? 'fr' : 'en';
   const cms = useSectionContent('hero', lang);
+  const { isMobile, canRender3D } = useDeviceCapability();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Parallax values for background shapes
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const rectY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const ellipseY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], [0, 40]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -300,19 +411,6 @@ export function Hero() {
     },
   };
 
-  const slideFromLeft: Variants = {
-    hidden: { opacity: 0, x: -120 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: 'spring' as const,
-        stiffness: 60,
-        damping: 18,
-      },
-    },
-  };
-
   const slideFromRight: Variants = {
     hidden: { opacity: 0, x: 150 },
     visible: {
@@ -327,20 +425,31 @@ export function Hero() {
     },
   };
 
+  const titleText = cms.title || t('hero.title');
+  const subtitleText = cms.subtitle || t('hero.subtitle');
+
   return (
-    <section 
+    <section
+      ref={sectionRef}
       className="relative w-full"
-      style={{ 
+      style={{
         marginTop: '90px',
         backgroundColor: 'var(--color-bg-hero, #263140)',
-        minHeight: '700px',
-        overflow: 'visible',
+        minHeight: isMobile ? '500px' : '700px',
+        overflow: 'hidden',
       }}
     >
+      {/* Floating particles background */}
+      <HeroParticles />
+
       <Container className="h-full">
-        <div 
+        <div
           className="flex items-center justify-between h-full py-16 lg:py-0"
-          style={{ minHeight: '600px' }}
+          style={{
+            minHeight: isMobile ? '460px' : '600px',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '40px' : '0',
+          }}
         >
           {/* Left Column - Text Content */}
           <motion.div
@@ -348,28 +457,29 @@ export function Hero() {
             initial="hidden"
             animate="visible"
             style={{
-              maxWidth: '466px',
+              maxWidth: isMobile ? '100%' : '466px',
               flexShrink: 0,
               zIndex: 20,
+              textAlign: isMobile ? 'center' : 'left',
             }}
           >
-            {/* Heading */}
-            <motion.div variants={slideFromLeft}>
-              <p 
+            {/* Heading — character-level staggered animation */}
+            <motion.div variants={fadeInUp}>
+              <p
                 style={{
                   color: 'var(--color-text-primary, #ffffff)',
                   fontFamily: '"Sulphur Point", sans-serif',
-                  fontSize: '50px',
+                  fontSize: isMobile ? '36px' : '50px',
                   fontWeight: 700,
                   letterSpacing: '0',
-                  lineHeight: '56px',
+                  lineHeight: isMobile ? '42px' : '56px',
                   fontStyle: 'italic',
                   margin: 0,
                 }}
               >
-                {cms.title || t('hero.title')}
+                <AnimatedText text={titleText} delay={0.3} />
                 <br />
-                {cms.subtitle || t('hero.subtitle')}
+                <AnimatedText text={subtitleText} delay={0.6} />
               </p>
             </motion.div>
 
@@ -379,7 +489,7 @@ export function Hero() {
               style={{
                 color: 'var(--color-text-secondary, #9CA3AF)',
                 fontFamily: '"Inter", sans-serif',
-                fontSize: '16px',
+                fontSize: isMobile ? '14px' : '16px',
                 fontWeight: 300,
                 letterSpacing: '0',
                 lineHeight: '30px',
@@ -389,15 +499,10 @@ export function Hero() {
               {cms.description || t('hero.description')}
             </motion.p>
 
-            {/* CTA Button with shimmer */}
+            {/* CTA Button with magnetic + shimmer effect */}
             <motion.div variants={fadeInUp}>
-              <motion.a
+              <MagneticButton
                 href="#contact"
-                whileHover={{ 
-                  scale: 1.05, 
-                  boxShadow: '0 15px 40px rgba(1, 165, 50, 0.5)' 
-                }}
-                whileTap={{ scale: 0.98 }}
                 className="hero-cta-shimmer"
                 style={{
                   display: 'inline-flex',
@@ -421,73 +526,84 @@ export function Hero() {
                 }}
               >
                 {cms.ctaText || t('hero.cta')}
-              </motion.a>
+              </MagneticButton>
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Dark rectangle + Green ellipse + Phone */}
-          <motion.div 
+          {/* Right Column - 3D Phone or CSS fallback + Background shapes */}
+          <motion.div
             variants={slideFromRight}
             initial="hidden"
             animate="visible"
             className="relative"
             style={{
-              width: '550px',
-              height: '700px',
+              width: isMobile ? '280px' : '550px',
+              height: isMobile ? '400px' : '700px',
               flexShrink: 0,
             }}
           >
-            {/* Dark navy rounded rectangle — background shape */}
+            {/* Dark navy rounded rectangle — parallax background shape */}
             <motion.div
               initial={{ opacity: 0, x: 80, rotate: 15 }}
               animate={{ opacity: 1, x: 0, rotate: 12 }}
               transition={{ delay: 0.3, duration: 0.9, type: 'spring', stiffness: 50, damping: 14 }}
               style={{
                 position: 'absolute',
-                width: '400px',
-                height: '580px',
-                right: '-40px',
-                top: '60px',
+                width: isMobile ? '250px' : '400px',
+                height: isMobile ? '370px' : '580px',
+                right: isMobile ? '-20px' : '-40px',
+                top: isMobile ? '20px' : '60px',
                 background: 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)',
                 borderRadius: '40px',
                 boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
                 zIndex: 0,
+                y: rectY,
               }}
             />
 
-            {/* Green Ellipse — static after entrance, no pulse */}
-            <motion.div 
+            {/* Green Ellipse — parallax at different speed */}
+            <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.8, type: 'spring', stiffness: 60, damping: 14 }}
               style={{
                 position: 'absolute',
-                width: '300px',
-                height: '300px',
-                right: '60px',
-                top: '160px',
+                width: isMobile ? '200px' : '300px',
+                height: isMobile ? '200px' : '300px',
+                right: isMobile ? '30px' : '60px',
+                top: isMobile ? '80px' : '160px',
                 background: 'linear-gradient(107deg, rgba(122, 201, 14, 1) 0%, rgba(1, 165, 50, 1) 76%)',
                 borderRadius: '50%',
                 boxShadow: '0px 4px 12px var(--color-shadow-dark, #1c1c1c)',
                 zIndex: 1,
+                y: ellipseY,
               }}
             />
 
-            {/* Phone — positioned on top of both shapes */}
+            {/* Phone — 3D on desktop, CSS on mobile */}
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 1, type: 'spring', stiffness: 50, damping: 12 }}
               style={{
                 position: 'absolute',
-                right: '50px',
+                right: isMobile ? '20px' : '50px',
                 top: '50%',
                 transform: 'translateY(-50%) rotate(12deg)',
                 zIndex: 10,
                 filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.35))',
+                y: phoneY,
               }}
             >
-              <PhoneDemo phoneAlt={t('hero.phoneAlt')} />
+              {canRender3D ? (
+                <Suspense fallback={<PhoneDemo phoneAlt={t('hero.phoneAlt')} />}>
+                  <div style={{ width: '280px', height: '500px', transform: 'rotate(-12deg)' }}>
+                    <PhoneMockup3D />
+                  </div>
+                </Suspense>
+              ) : (
+                <PhoneDemo phoneAlt={t('hero.phoneAlt')} />
+              )}
             </motion.div>
           </motion.div>
         </div>

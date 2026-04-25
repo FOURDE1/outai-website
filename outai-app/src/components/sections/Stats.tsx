@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef } from 'react';
 import { Container } from '@/components/common';
 import { fadeInLeft, fadeInRight, viewportSettings } from '@/lib/animations';
 import { useSectionContent, useCmsImage } from '@/contexts/CmsContext';
+import { useDeviceCapability } from '@/hooks/useDeviceCapability';
 
 import statsImage from '@/assets/stats/car-keys.jpg';
 
@@ -23,7 +24,6 @@ function useCountUp(target: number, duration: number = 1500) {
           const animate = (now: number) => {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            // Ease out cubic
             const eased = 1 - Math.pow(1 - progress, 3);
             setCount(Math.round(eased * target));
             if (progress < 1) requestAnimationFrame(animate);
@@ -37,10 +37,9 @@ function useCountUp(target: number, duration: number = 1500) {
     return () => observer.disconnect();
   }, [target, duration, hasStarted]);
 
-  return { count, ref };
+  return { count, ref, hasStarted };
 }
 
-// Parse number from CMS string like "500 +"
 function parseStatNumber(val: string): number {
   const match = val.match(/\d+/);
   return match ? parseInt(match[0], 10) : 0;
@@ -56,25 +55,36 @@ export function Stats() {
   const lang = i18n.language === 'fr' ? 'fr' : 'en';
   const cms = useSectionContent('stats', lang);
   const statImg = useCmsImage('stats_image', statsImage);
+  const { isMobile } = useDeviceCapability();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Parallax for decorative ellipses + image
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const yellowY = useTransform(scrollYProgress, [0, 1], [30, -50]);
+  const greenY = useTransform(scrollYProgress, [0, 1], [50, -30]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [20, -20]);
 
   return (
-    <section 
+    <section
+      ref={sectionRef}
       id="stats"
       className="w-full relative z-20 overflow-hidden"
-      style={{ 
+      style={{
         backgroundColor: 'var(--color-bg-hero, #263140)',
       }}
     >
       <Container>
-        <div 
+        <div
           className="flex flex-col lg:flex-row items-center"
-          style={{ 
-            gap: '80px',
+          style={{
+            gap: isMobile ? '40px' : '80px',
             paddingTop: '80px',
             paddingBottom: '80px',
           }}
         >
-          
           {/* Left Side - Image with decorative ellipses */}
           <motion.div
             initial="hidden"
@@ -83,12 +93,12 @@ export function Stats() {
             variants={fadeInLeft}
             className="relative flex-shrink-0"
             style={{
-              width: '426px',
-              height: '509px',
+              width: isMobile ? '300px' : '426px',
+              height: isMobile ? '380px' : '509px',
             }}
           >
-            {/* Yellow Ellipse - Top Left - with entrance + breathing */}
-            <motion.div 
+            {/* Yellow Ellipse - parallax + breathing */}
+            <motion.div
               className="absolute"
               initial={{ scale: 0, opacity: 0, filter: 'blur(10px)' }}
               whileInView={{ scale: [0, 1.1, 1], opacity: 1, filter: 'blur(0px)' }}
@@ -101,18 +111,19 @@ export function Stats() {
                 },
               }}
               style={{
-                width: '150px',
-                height: '150px',
+                width: isMobile ? '100px' : '150px',
+                height: isMobile ? '100px' : '150px',
                 left: '0',
                 top: '18px',
                 backgroundColor: 'var(--color-yellow-accent, #FADF23)',
-                borderRadius: '75px',
+                borderRadius: '50%',
                 boxShadow: '0px 4px 12px var(--color-shadow-dark, #1c1c1c)',
+                y: isMobile ? 0 : yellowY,
               }}
             />
-            
-            {/* Green Gradient Ellipse - Bottom Right - with entrance + breathing */}
-            <motion.div 
+
+            {/* Green Gradient Ellipse - parallax at different speed */}
+            <motion.div
               className="absolute"
               initial={{ scale: 0, opacity: 0, filter: 'blur(10px)' }}
               whileInView={{ scale: [0, 1.1, 1], opacity: 1, filter: 'blur(0px)' }}
@@ -125,29 +136,31 @@ export function Stats() {
                 },
               }}
               style={{
-                width: '262px',
-                height: '262px',
-                left: '164px',
-                top: '247px',
+                width: isMobile ? '180px' : '262px',
+                height: isMobile ? '180px' : '262px',
+                left: isMobile ? '100px' : '164px',
+                top: isMobile ? '180px' : '247px',
                 background: 'linear-gradient(107deg, rgba(122, 201, 14, 1) 0%, rgba(1, 165, 50, 1) 76%)',
-                borderRadius: '131px',
+                borderRadius: '50%',
                 boxShadow: '0px 4px 12px #1c1c1c',
+                y: isMobile ? 0 : greenY,
               }}
             />
-            
-            {/* Main Image */}
+
+            {/* Main Image — parallax */}
             <motion.img
               src={statImg}
               alt={t('stats.imageAlt')}
-              whileHover={{ scale: 1.05 }}
+              whileHover={isMobile ? undefined : { scale: 1.05 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="absolute object-cover"
               style={{
-                width: '325px',
-                height: '476px',
-                left: '63px',
+                width: isMobile ? '230px' : '325px',
+                height: isMobile ? '350px' : '476px',
+                left: isMobile ? '40px' : '63px',
                 top: '-12px',
                 borderRadius: '24px',
+                y: isMobile ? 0 : imageY,
               }}
             />
           </motion.div>
@@ -161,31 +174,29 @@ export function Stats() {
             className="flex flex-col w-full lg:flex-1"
             style={{ gap: '60px' }}
           >
-            {/* Hero Text */}
             <div className="flex flex-col" style={{ gap: '30px' }}>
-              {/* Heading */}
-              <h2 
+              <h2
                 style={{
                   color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Sulphur Point", sans-serif',
-                  fontSize: '40px',
+                  fontSize: isMobile ? '28px' : '40px',
                   fontWeight: 700,
-                  lineHeight: '56px',
+                  lineHeight: isMobile ? '36px' : '56px',
                   letterSpacing: '0',
+                  textAlign: isMobile ? 'center' : 'left',
                 }}
               >
                 {t('stats.sectionTitle')}
               </h2>
-              
-              {/* Paragraph */}
-              <p 
+              <p
                 style={{
                   color: 'var(--color-text-primary, #FFFFFF)',
                   fontFamily: '"Inter", sans-serif',
-                  fontSize: '16px',
+                  fontSize: isMobile ? '14px' : '16px',
                   fontWeight: 300,
                   lineHeight: '30px',
                   letterSpacing: '0',
+                  textAlign: isMobile ? 'center' : 'left',
                 }}
               >
                 {t('stats.sectionDescription')}
@@ -193,11 +204,13 @@ export function Stats() {
             </div>
 
             {/* Stats */}
-            <div 
+            <div
               className="flex justify-between"
-              style={{ maxWidth: '440px' }}
+              style={{
+                maxWidth: '440px',
+                margin: isMobile ? '0 auto' : undefined,
+              }}
             >
-              {/* Stat 1 - Successful Rides */}
               <StatCounter
                 value={cms.stat1Value || '500 +'}
                 label={cms.stat1Label || t('stats.successfulRides')}
@@ -206,8 +219,6 @@ export function Stats() {
                 width="149px"
                 gap="26px"
               />
-
-              {/* Stat 2 - Business Clients */}
               <StatCounter
                 value={cms.stat2Value || '300 +'}
                 label={cms.stat2Label || t('stats.businessClients')}
@@ -218,14 +229,13 @@ export function Stats() {
               />
             </div>
           </motion.div>
-
         </div>
       </Container>
     </section>
   );
 }
 
-// Animated stat counter component
+// Animated stat counter with blur-to-sharp transition
 function StatCounter({
   value,
   label,
@@ -243,7 +253,8 @@ function StatCounter({
 }) {
   const target = parseStatNumber(value);
   const suffix = parseSuffix(value);
-  const { count, ref } = useCountUp(target, 1500);
+  const { count, ref, hasStarted } = useCountUp(target, 1500);
+  const progress = target > 0 ? count / target : 0;
 
   return (
     <motion.div
@@ -266,6 +277,8 @@ function StatCounter({
           lineHeight: '30px',
           textAlign: 'center',
           cursor: 'default',
+          filter: hasStarted && progress < 1 ? `blur(${(1 - progress) * 3}px)` : 'blur(0px)',
+          transition: 'filter 0.1s ease-out',
         }}
       >
         {count}{suffix}

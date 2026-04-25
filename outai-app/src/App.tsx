@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { CmsProvider, useSiteSettings } from '@/contexts/CmsContext';
+import { SmoothScroll, ScrollProgress } from '@/components/common';
 import logoImage from '@/assets/common/logo.png';
 
 const Home = lazy(() => import('@/pages/Home'));
@@ -65,62 +66,65 @@ function App() {
     <ThemeProvider>
       <LanguageProvider>
         <CmsProvider>
-        <Router>
-          <Suspense fallback={<PageLoader />}>
-            <MaintenanceGate>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/last-mile-b2b" element={<LastMileB2B />} />
-
-              {/* ── Admin routes ── */}
-              <Route path="/admin/*" element={
-                <AdminAuthProvider>
+          <SmoothScroll>
+            <Router>
+              <ScrollProgress />
+              <Suspense fallback={<PageLoader />}>
+                <MaintenanceGate>
                   <Routes>
-                    <Route path="login" element={<AdminLogin />} />
-                    <Route element={<ProtectedRoute />}>
-                      <Route element={<AdminLayout />}>
-                        <Route index element={<DashboardOverview />} />
-                        <Route path="content" element={<ContentManager />} />
-                        <Route path="blog" element={<BlogManager />} />
-                        <Route path="faq" element={<FAQManager />} />
-                        <Route path="services" element={<ServiceManager />} />
-                        <Route path="settings" element={<SettingsManager />} />
-                      </Route>
-                    </Route>
-                  </Routes>
-                </AdminAuthProvider>
-              } />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/last-mile-b2b" element={<LastMileB2B />} />
 
-              <Route path="*" element={<Home />} />
-            </Routes>
-            </MaintenanceGate>
-          </Suspense>
-        </Router>
-        
-        {/* Toast notifications */}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: 'var(--color-bg-secondary)',
-              color: 'var(--color-text-primary)',
-              border: '1px solid var(--color-border)',
-            },
-            success: {
-              iconTheme: {
-                primary: '#01A532',
-                secondary: 'white',
+                    {/* ── Admin routes ── */}
+                    <Route path="/admin/*" element={
+                      <AdminAuthProvider>
+                        <Routes>
+                          <Route path="login" element={<AdminLogin />} />
+                          <Route element={<ProtectedRoute />}>
+                            <Route element={<AdminLayout />}>
+                              <Route index element={<DashboardOverview />} />
+                              <Route path="content" element={<ContentManager />} />
+                              <Route path="blog" element={<BlogManager />} />
+                              <Route path="faq" element={<FAQManager />} />
+                              <Route path="services" element={<ServiceManager />} />
+                              <Route path="settings" element={<SettingsManager />} />
+                            </Route>
+                          </Route>
+                        </Routes>
+                      </AdminAuthProvider>
+                    } />
+
+                    <Route path="*" element={<Home />} />
+                  </Routes>
+                </MaintenanceGate>
+              </Suspense>
+            </Router>
+          </SmoothScroll>
+
+          {/* Toast notifications */}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: 'var(--color-bg-secondary)',
+                color: 'var(--color-text-primary)',
+                border: '1px solid var(--color-border)',
               },
-            },
-            error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: 'white',
+              success: {
+                iconTheme: {
+                  primary: '#01A532',
+                  secondary: 'white',
+                },
               },
-            },
-          }}
-        />
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: 'white',
+                },
+              },
+            }}
+          />
         </CmsProvider>
       </LanguageProvider>
     </ThemeProvider>

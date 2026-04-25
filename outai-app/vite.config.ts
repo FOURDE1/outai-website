@@ -19,6 +19,8 @@ export default defineConfig({
           animations: ['framer-motion'],
           i18n: ['i18next', 'react-i18next'],
           admin: ['react-hook-form', 'zod', '@hookform/resolvers', 'recharts'],
+          threejs: ['three', '@react-three/fiber', '@react-three/drei'],
+          smoothscroll: ['lenis'],
         },
       },
     },

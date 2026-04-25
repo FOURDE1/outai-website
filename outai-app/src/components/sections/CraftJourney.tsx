@@ -1,8 +1,9 @@
-import { motion, type Variants } from 'framer-motion';
+import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useState, useRef, useCallback } from 'react';
 import { Container } from '@/components/common';
 import { fadeInUp, viewportSettings } from '@/lib/animations';
+import { useDeviceCapability } from '@/hooks/useDeviceCapability';
 
 // Import feature images
 import comfortImage from '@/assets/features/comfort.jpg';
@@ -64,10 +65,7 @@ const textSlideLeft: Variants = {
 };
 
 /**
- * Feature row with Figma green gradient hover box.
- * On hover: a green gradient box expands from behind the image toward the text,
- * extending slightly past the image side too (like a rectangle expanded on both sides).
- * On hover-out: immediately starts collapsing back toward the photo with a slight overshoot, then disappears.
+ * Feature row with Figma green gradient hover box + scroll-driven parallax on images.
  */
 function FeatureRow({
   imageLeft,
@@ -79,6 +77,7 @@ function FeatureRow({
   spacerWidth,
   textWidth,
   delay,
+  isMobile,
 }: {
   imageLeft: boolean;
   imageSrc: string;
@@ -89,25 +88,34 @@ function FeatureRow({
   spacerWidth: string;
   textWidth: string;
   delay: number;
+  isMobile: boolean;
 }) {
   const [greenBoxVisible, setGreenBoxVisible] = useState(false);
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-driven parallax for the image
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: ['start end', 'end start'],
+  });
+  const imageParallaxY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.98]);
 
   const handleHoverStart = useCallback(() => {
+    if (isMobile) return;
     if (dismissTimer.current) {
       clearTimeout(dismissTimer.current);
       dismissTimer.current = null;
     }
     setGreenBoxVisible(true);
-    // Auto-dismiss after 2 seconds
     dismissTimer.current = setTimeout(() => {
       setGreenBoxVisible(false);
       dismissTimer.current = null;
     }, 2000);
-  }, []);
+  }, [isMobile]);
 
   const handleHoverEnd = useCallback(() => {
-    // Immediately start collapsing
     if (dismissTimer.current) {
       clearTimeout(dismissTimer.current);
       dismissTimer.current = null;
@@ -115,8 +123,6 @@ function FeatureRow({
     setGreenBoxVisible(false);
   }, []);
 
-  // Green box: positioned behind the text content area, matching text height
-  // Anchored to the text side, extends a little past image side too
   const greenBoxStyle: React.CSSProperties = {
     position: 'absolute',
     borderRadius: '24px',
@@ -128,20 +134,22 @@ function FeatureRow({
   const imageContent = (
     <motion.div
       variants={imageLeft ? imageSlideLeft : imageSlideRight}
-      whileHover={{ scale: 1.02 }}
+      whileHover={isMobile ? undefined : { scale: 1.02 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        width: imageWidth,
-        height: '550px',
+        width: isMobile ? '100%' : imageWidth,
+        height: isMobile ? '300px' : '550px',
         flexShrink: 0,
         overflow: 'hidden',
         borderRadius: '16px',
         position: 'relative',
         zIndex: 2,
+        y: isMobile ? 0 : imageParallaxY,
+        scale: isMobile ? 1 : imageScale,
       }}
     >
       <motion.img
-        whileHover={{ scale: 1.05 }}
+        whileHover={isMobile ? undefined : { scale: 1.08 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         src={imageSrc}
         alt={imageAlt}
@@ -158,7 +166,11 @@ function FeatureRow({
   const textContent = (
     <motion.div
       variants={imageLeft ? textSlideRight : textSlideLeft}
-      style={{ width: textWidth, position: 'relative', zIndex: 2 }}
+      style={{
+        width: isMobile ? '100%' : textWidth,
+        position: 'relative',
+        zIndex: 2,
+      }}
     >
       <motion.div
         variants={textContainerVariants}
@@ -172,9 +184,9 @@ function FeatureRow({
           style={{
             color: 'var(--color-text-primary, #FFFFFF)',
             fontFamily: '"Sulphur Point", sans-serif',
-            fontSize: '32px',
+            fontSize: isMobile ? '24px' : '32px',
             fontWeight: 700,
-            lineHeight: '56px',
+            lineHeight: isMobile ? '36px' : '56px',
             marginBottom: '16px',
           }}
         >
@@ -185,8 +197,8 @@ function FeatureRow({
           style={{
             color: 'var(--color-text-primary, #FFFFFF)',
             fontFamily: '"Inter", sans-serif',
-            fontSize: '24px',
-            lineHeight: '43px',
+            fontSize: isMobile ? '16px' : '24px',
+            lineHeight: isMobile ? '28px' : '43px',
             fontWeight: 300,
           }}
         >
@@ -198,6 +210,7 @@ function FeatureRow({
 
   return (
     <motion.div
+      ref={rowRef}
       initial="hidden"
       whileInView="visible"
       viewport={viewportSettings}
@@ -206,44 +219,47 @@ function FeatureRow({
       transition={{ delayChildren: delay }}
       style={{
         display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: '550px',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: isMobile ? 'stretch' : 'center',
+        gap: isMobile ? '24px' : '0',
+        minHeight: isMobile ? 'auto' : '550px',
         position: 'relative',
         cursor: 'pointer',
       }}
     >
-      {/* Green box at row level — emerges from behind the image toward text */}
-      <motion.div
-        animate={greenBoxVisible
-          ? { scaleX: 1, opacity: 1 }
-          : { scaleX: 0, opacity: 0 }
-        }
-        initial={{ scaleX: 0, opacity: 0 }}
-        transition={greenBoxVisible
-          ? {
+      {/* Green box — only on desktop */}
+      {!isMobile && (
+        <motion.div
+          animate={greenBoxVisible
+            ? { scaleX: 1, opacity: 1 }
+            : { scaleX: 0, opacity: 0 }
+          }
+          initial={{ scaleX: 0, opacity: 0 }}
+          transition={greenBoxVisible
+            ? {
               scaleX: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
               opacity: { duration: 0.3 },
             }
-          : {
+            : {
               scaleX: { duration: 0.5, ease: [0.36, 0, 0.66, -0.56] },
               opacity: { duration: 0.4, delay: 0.15 },
             }
-        }
-        style={{
-          ...greenBoxStyle,
-          top: '18%',
-          bottom: '18%',
-          left: imageLeft ? '15%' : '0%',
-          right: imageLeft ? '0%' : '15%',
-          transformOrigin: imageLeft ? 'left center' : 'right center',
-        }}
-      />
+          }
+          style={{
+            ...greenBoxStyle,
+            top: '18%',
+            bottom: '18%',
+            left: imageLeft ? '15%' : '0%',
+            right: imageLeft ? '0%' : '15%',
+            transformOrigin: imageLeft ? 'left center' : 'right center',
+          }}
+        />
+      )}
 
-      {imageLeft ? (
+      {imageLeft || isMobile ? (
         <>
           {imageContent}
-          <div style={{ width: spacerWidth }} />
+          {!isMobile && <div style={{ width: spacerWidth }} />}
           {textContent}
         </>
       ) : (
@@ -259,6 +275,7 @@ function FeatureRow({
 
 export function CraftJourney() {
   const { t } = useTranslation();
+  const { isMobile } = useDeviceCapability();
 
   return (
     <section
@@ -317,9 +334,8 @@ export function CraftJourney() {
           </motion.p>
         </motion.div>
 
-        {/* Features - 3 rows matching Figma exactly */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
-          {/* Row 1 - Refined Comfort: Image LEFT (43%), Text RIGHT */}
+        {/* Features - 3 rows */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '48px' : '60px' }}>
           <FeatureRow
             imageLeft={true}
             imageSrc={comfortImage}
@@ -330,9 +346,8 @@ export function CraftJourney() {
             spacerWidth="8%"
             textWidth="49%"
             delay={0}
+            isMobile={isMobile}
           />
-
-          {/* Row 2 - Seamless Service: Text LEFT, Image RIGHT (43%) */}
           <FeatureRow
             imageLeft={false}
             imageSrc={serviceImage}
@@ -343,9 +358,8 @@ export function CraftJourney() {
             spacerWidth="9%"
             textWidth="48%"
             delay={0.15}
+            isMobile={isMobile}
           />
-
-          {/* Row 3 - Curated Ambiance: Image LEFT (42%), Text RIGHT */}
           <FeatureRow
             imageLeft={true}
             imageSrc={ambianceImage}
@@ -356,6 +370,7 @@ export function CraftJourney() {
             spacerWidth="7%"
             textWidth="51%"
             delay={0.3}
+            isMobile={isMobile}
           />
         </div>
       </Container>

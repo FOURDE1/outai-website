@@ -376,3 +376,71 @@ input, textarea, select {
   --color-dark-cell: #263140;
   --color-dark-tertiary: #1A1F26;
 }
+
+/* ──────────────────────────────────────────────────────────
+   Section Transitions — smooth gradient morphing between sections
+   ────────────────────────────────────────────────────────── */
+section + section {
+  position: relative;
+}
+
+section + section::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-bg-primary, #1F2937) 50%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Scroll Progress Bar
+   ────────────────────────────────────────────────────────── */
+.scroll-progress-bar {
+  will-change: transform;
+  transform-origin: left;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Service Card 3D tilt overrides
+   ────────────────────────────────────────────────────────── */
+.service-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.service-card > * {
+  transform: translateZ(0);
+}
+
+/* ──────────────────────────────────────────────────────────
+   Reduced Motion — disable all animations for a11y
+   ────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-particle,
+  .hero-cta-shimmer::after {
+    animation: none !important;
+  }
+
+  .scroll-progress-bar {
+    display: none !important;
+  }
+}

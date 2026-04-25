@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Container } from '@/components/common';
 import { fadeInUp, fadeInLeft, fadeInRight, viewportSettings } from '@/lib/animations';
 import { useState } from 'react';
+import { useDeviceCapability } from '@/hooks/useDeviceCapability';
 import { usePublishedBlogPosts } from '@/contexts/CmsContext';
 import { getImage } from '@/lib/cmsStore';
 
@@ -35,16 +36,18 @@ function getBlogCoverImage(postId: string): string {
 }
 
 // Small Blog Card Component (for the two bottom posts)
-function SmallBlogCard({ 
-  image, 
-  date, 
-  title, 
-  excerpt 
-}: { 
-  image: string; 
-  date: string; 
-  title: string; 
+function SmallBlogCard({
+  image,
+  date,
+  title,
+  excerpt,
+  isMobile,
+}: {
+  image: string;
+  date: string;
+  title: string;
   excerpt: string;
+  isMobile: boolean;
 }) {
   const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
@@ -53,19 +56,20 @@ function SmallBlogCard({
     <motion.div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ 
-        y: -10, 
+      whileHover={{
+        y: -10,
         boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
       }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       style={{
         display: 'flex',
-        alignItems: 'center',
-        gap: '24px',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: isMobile ? 'stretch' : 'center',
+        gap: isMobile ? '0' : '24px',
         backgroundColor: 'var(--color-bg-primary, #1F2937)',
         borderRadius: '8px',
-        width: '537px',
-        height: '365px',
+        width: isMobile ? '100%' : '537px',
+        height: isMobile ? 'auto' : '365px',
         overflow: 'hidden',
         cursor: 'pointer',
       }}
@@ -73,9 +77,9 @@ function SmallBlogCard({
       {/* Image */}
       <div
         style={{
-          width: '266px',
-          height: '365px',
-          borderRadius: '20px',
+          width: isMobile ? '100%' : '266px',
+          height: isMobile ? '200px' : '365px',
+          borderRadius: isMobile ? '8px 8px 0 0' : '20px',
           overflow: 'hidden',
           flexShrink: 0,
         }}
@@ -161,12 +165,12 @@ function SmallBlogCard({
           }}
         >
           {t('blog.readMore')}
-          <motion.svg 
+          <motion.svg
             animate={{ x: isHovered ? 5 : 0 }}
             transition={{ duration: 0.2 }}
             width="24" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </motion.svg>
         </motion.a>
       </div>
@@ -178,6 +182,7 @@ export function Blog() {
   const { t, i18n } = useTranslation();
   const publishedPosts = usePublishedBlogPosts();
   const lang = i18n.language === 'fr' ? 'fr' : 'en';
+  const { isMobile } = useDeviceCapability();
 
   const featured = publishedPosts.find((p) => p.isFeatured) || publishedPosts[0];
   const otherPosts = publishedPosts.filter((p) => p.id !== featured?.id).slice(0, 2);
@@ -242,8 +247,8 @@ export function Blog() {
           whileInView="visible"
           viewport={viewportSettings}
           variants={fadeInUp}
-          whileHover={{ 
-            y: -8, 
+          whileHover={{
+            y: -8,
             boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
           }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -348,12 +353,12 @@ export function Blog() {
                 }}
               >
                 {t('blog.readMore')}
-                <motion.svg 
+                <motion.svg
                   whileHover={{ x: 5 }}
                   transition={{ duration: 0.2 }}
                   width="24" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </motion.svg>
               </motion.a>
             </div>
@@ -368,7 +373,8 @@ export function Blog() {
           variants={fadeInUp}
           style={{
             display: 'flex',
-            gap: '47px',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '24px' : '47px',
             justifyContent: 'center',
             flexWrap: 'wrap',
           }}
@@ -383,6 +389,7 @@ export function Blog() {
                 date={post.publishedAt}
                 title={lang === 'fr' ? post.titleFr : post.titleEn}
                 excerpt={lang === 'fr' ? post.excerptFr : post.excerptEn}
+                isMobile={isMobile}
               />
             </motion.div>
           ))}

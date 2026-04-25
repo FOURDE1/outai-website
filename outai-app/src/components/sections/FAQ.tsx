@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Container } from '@/components/common';
 import { fadeInLeft, fadeInRight, viewportSettings } from '@/lib/animations';
 import { useVisibleFAQItems } from '@/contexts/CmsContext';
+import { useDeviceCapability } from '@/hooks/useDeviceCapability';
 
 // Stagger header
 const faqHeaderContainer: Variants = {
@@ -28,6 +29,7 @@ export function FAQ() {
   const faqItems = useVisibleFAQItems();
   const lang = i18n.language === 'fr' ? 'fr' : 'en';
   const [openItems, setOpenItems] = useState<string[]>([]);
+  const { isMobile } = useDeviceCapability();
 
   const leftItems = faqItems.filter((_: unknown, i: number) => i % 2 === 0);
   const rightItems = faqItems.filter((_: unknown, i: number) => i % 2 !== 0);
@@ -98,9 +100,9 @@ export function FAQ() {
             style={{
               color: 'var(--color-text-primary, #FFFFFF)',
               fontFamily: '"Sulphur Point", sans-serif',
-              fontSize: '40px',
+              fontSize: isMobile ? '28px' : '40px',
               fontWeight: 700,
-              lineHeight: '48px',
+              lineHeight: isMobile ? '36px' : '48px',
             }}
           >
             {t('faq.sectionSubtitle')}
@@ -111,7 +113,8 @@ export function FAQ() {
         <div
           style={{
             display: 'flex',
-            gap: '80px',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '0' : '80px',
             justifyContent: 'center',
           }}
         >
@@ -125,7 +128,7 @@ export function FAQ() {
               display: 'flex',
               flexDirection: 'column',
               gap: '0',
-              width: '400px',
+              width: isMobile ? '100%' : '400px',
             }}
           >
             {leftItems.map((item, index) => (
@@ -151,7 +154,7 @@ export function FAQ() {
               display: 'flex',
               flexDirection: 'column',
               gap: '0',
-              width: '400px',
+              width: isMobile ? '100%' : '400px',
             }}
           >
             {rightItems.map((item, index) => (
@@ -246,7 +249,7 @@ function FAQItem({ question, answer, isOpen, onToggle, index }: FAQItemProps) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ 
+            transition={{
               height: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
               opacity: { duration: 0.3, delay: 0.1 },
             }}
